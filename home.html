@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="security.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5985177255920045"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CF2KGAMER TAMBAYAN PH| PREMIUM HOME</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+body { background-color:#020b16; color:white; font-family:'Plus Jakarta Sans',sans-serif; overflow-x:hidden; scroll-behavior:smooth; }
+.no-scrollbar::-webkit-scrollbar { display:none; }
+
+/* FOCUS SYSTEM FOR REMOTE & MOUSE */
+:focus{
+outline:none;
+border:2px solid #35cfff !important;
+transform:scale(1.08);
+z-index:50;
+box-shadow:0 0 20px rgba(53,207,255,.4);
+}
+
+.portrait-card,.ranking-card,.chip,.type-toggle-btn,button,a{
+transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+cursor:pointer;
+}
+
+/* BURGER MENU */
+#side-menu{
+position:fixed;
+top:0;
+left:-100%;
+width:75%;
+height:100%;
+background:rgba(8,20,36,.98);
+backdrop-filter:blur(20px);
+z-index:1000;
+transition:0.4s ease;
+border-right:1px solid rgba(53,207,255,.12);
+}
+
+#side-menu.active{
+left:0;
+}
+
+.menu-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+z-index:900;
+display:none;
+}
+
+/* HERO BANNER */
+#hero-banner{
+width:100%;
+height:480px;
+display:flex;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+scroll-behavior:smooth;
+}
+
+.banner-slide{
+flex:0 0 100%;
+width:100%;
+height:100%;
+position:relative;
+scroll-snap-align:start;
+}
+
+.banner-slide img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.banner-overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(to top,#020b16 5%,transparent 60%);
+}
+
+/* CARDS */
+.portrait-card{
+flex:0 0 auto;
+width:115px;
+border-radius:12px;
+overflow:hidden;
+border:1px solid rgba(53,207,255,.14);
+position:relative;
+background:#0c1d32;
+}
+
+.portrait-card img{
+width:100%;
+aspect-ratio:2/3;
+object-fit:cover;
+}
+
+.portrait-overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(to top,rgba(0,0,0,.95)10%,transparent 50%);
+}
+
+/* RANKING */
+.ranking-card{
+flex:0 0 auto;
+position:relative;
+width:260px;
+height:145px;
+border-radius:14px;
+overflow:hidden;
+background:#0c1d32;
+border:1.5px solid rgba(53,207,255,.14);
+}
+
+.overlay-number{
+position:absolute;
+bottom:-10px;
+left:5px;
+font-family:'Orbitron',sans-serif;
+font-size:70px;
+font-weight:900;
+color:rgba(0,0,0,.7);
+-webkit-text-stroke:1.5px rgba(140,240,255,.45);
+z-index:20;
+pointer-events:none;
+}
+
+/* CHIPS & TOGGLES */
+.chip{
+flex:0 0 auto;
+padding:10px 22px;
+border-radius:25px;
+background:#0d2238;
+border:1px solid rgba(53,207,255,.14);
+font-size:11px;
+font-weight:800;
+color:#8fdfff;
+}
+
+.chip.active{
+background:#35cfff;
+color:#02131d;
+border-color:#35cfff;
+}
+
+.type-toggle-btn.active{
+background:#35cfff;
+}
+
+.type-toggle-btn.active img{
+filter:invert(0);
+}
+
+/* SEARCH MODAL */
+#search-container{
+position:fixed;
+inset:0;
+background:#020b16;
+z-index:2000;
+display:none;
+flex-direction:column;
+}
+</style>
+</head>
+<body class="pb-24">
+
+    <div id="menu-overlay" class="menu-overlay" onclick="toggleMenu()"></div>
+    
+    <div id="side-menu" class="p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="font-['Orbitron'] text-xl text-yellow-500 uppercase tracking-widest">Cf2k Menu</h2>
+            <button onclick="toggleMenu()" class="text-2xl text-cyan-300">✕</button>
+        </div>
+        <nav class="flex flex-col gap-6 font-bold text-lg text-zinc-300">
+            <a href="explore.html?type=movie" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+                <img src="https://i.postimg.cc/SNPQ2q74/film.png" class="w-6 h-6 invert"> <span>Movies</span>
+            </a>
+            <a href="explore.html?type=tv" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+                <img src="https://i.postimg.cc/TPVT4b8R/3283202.png" class="w-6 h-6 invert"> <span>TV Series</span>
+            </a>
+            <a href="explore.html?type=kids" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+                <img src="https://i.postimg.cc/mryGwGMP/baby-boy.png" class="w-6 h-6 invert"> <span>Kids Zone</span>
+            </a>
+            <a href="explore.html?type=ph" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+                <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png" class="w-6 h-6 invert"> <span>Pinoy Pride</span>
+            </a>
+            <a href="live.html" tabindex="0" class="flex items-center gap-4 text-red-500 focus:text-white">
+                <img src="https://i.postimg.cc/RVJ5Ytfy/live-streaming.png" class="w-6 h-6"> <span>Live TV</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-8 opacity-20 transition-opacity hover:opacity-50">
+            <div class="space-y-1">
+                <p class="text-[8px] uppercase tracking-[5px] text-zinc-500 font-bold">Architecture</p>
+                <div class="text-[10px] text-zinc-500 font-medium tracking-wide">
+                    <p>Developer: <span class="text-zinc-400">[Name]</span></p>
+                    <p>Partnership: <span class="text-zinc-400">[Name]</span></p>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5">
+                <p class="text-[7px] text-zinc-700 tracking-[3px] uppercase font-black">KINGCINEMA PREMIUM V1</p>
+            </div>
+        </div>
+    </div>
+    <header class="sticky top-0 z-[100] p-4 bg-black/90 backdrop-blur-md border-b border-white/5">
+        <div class="flex justify-between items-center px-2">
+            <div class="flex items-center gap-4">
+                <button tabindex="0" onclick="toggleMenu()" class="text-2xl focus:text-yellow-500">☰</button>
+                <h1 class="font-['Orbitron'] text-xl text-cyan-400 tracking-tighter uppercase">CF2KGAMER TAMBAYAN PH</h1>
+            </div>
+            <div class="flex gap-4 items-center">
+                <button tabindex="0" onclick="toggleSearch()" class="focus:scale-110">
+                    <img src="https://i.postimg.cc/DzgtGPk7/search-interface-symbol.png" class="w-5 h-5 invert">
+                </button>
+                <div tabindex="0" class="w-9 h-9 rounded-full bg-zinc-800 border border-cyan-400/50 flex items-center justify-center overflow-hidden">
+                    <span class="text-[10px] font-black text-yellow-500">CF2K</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero-banner" class="no-scrollbar snap-x snap-mandatory"></section>
+
+    <section class="mt-8">
+        <div class="px-6 mb-4 flex items-center justify-between">
+            <h2 class="text-[10px] font-black uppercase text-zinc-500 tracking-[3px]">Switch Platform</h2>
+            <div class="flex gap-2">
+                <button id="type-movie" tabindex="0" class="type-toggle-btn active p-2.5 bg-zinc-900 rounded-lg" onclick="setMediaType('movie')"><img src="https://i.postimg.cc/SNPQ2q74/film.png" class="w-4 h-4 invert"></button>
+                <button id="type-tv" tabindex="0" class="type-toggle-btn p-2.5 bg-zinc-900 rounded-lg" onclick="setMediaType('tv')"><img src="https://i.postimg.cc/TPVT4b8R/3283202.png" class="w-4 h-4 invert"></button>
+            </div>
+        </div>
+        <div class="flex gap-3 px-6 overflow-x-auto no-scrollbar">
+            <div tabindex="0" class="chip active" data-id="213" onclick="updateServiceRow(213, 'Netflix', this)">NETFLIX</div>
+            <div tabindex="0" class="chip" data-id="1024" onclick="updateServiceRow(1024, 'Amazon', this)">PRIME</div>
+            <div tabindex="0" class="chip" data-id="2739" onclick="updateServiceRow(2739, 'Disney', this)">DISNEY+</div>
+            <div tabindex="0" class="chip" data-id="10759" onclick="updateServiceRow(10759, 'Apple', this)">APPLE TV</div>
+            <div tabindex="0" class="chip" data-id="49" onclick="updateServiceRow(49, 'HBO', this)">HBO MAX</div>
+        </div>
+    </section>
+
+    <div id="dynamic-service-row"></div>
+
+    <main id="main-content"></main>
+
+    <div id="search-container">
+        <div class="p-4 flex items-center gap-4 bg-zinc-900 border-b border-white/10">
+            <button tabindex="0" onclick="toggleSearch()" class="text-2xl focus:text-yellow-500">✕</button>
+            <input tabindex="0" type="text" id="search-input" placeholder="Search movies, series..." class="bg-transparent w-full p-3 outline-none text-white text-lg">
+        </div>
+        <div id="search-results" class="flex-1 overflow-y-auto p-6 grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+    </div>
+    
+    <script>
+        const apiKey = '16902847bed95ac4ac7130b3f811f009';
+        let activeType = 'movie', activeNetId = 213, activeNetName = 'Netflix';
+
+        // SEARCH LOGIC
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            const query = e.target.value; const resBox = document.getElementById('search-results');
+            if (query.length < 2) return;
+            try {
+                const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}`);
+                const data = await res.json(); resBox.innerHTML = '';
+                data.results.forEach(item => { if (!item.poster_path) return;
+                    const card = document.createElement('div');
+                    card.className = "bg-zinc-900 rounded-xl overflow-hidden border border-white/5";
+                    card.tabIndex = 0;
+                    card.onclick = () => location.href = `player.html?id=${item.id}&type=${item.media_type}`;
+                    card.innerHTML = `<img src="https://image.tmdb.org/t/p/w300${item.poster_path}"><p class="p-2 text-[10px] font-bold truncate">${item.title || item.name}</p>`;
+                    resBox.appendChild(card);
+                });
+            } catch(e) {}
+        });
+
+        function toggleMenu() { 
+            const m = document.getElementById('side-menu'); m.classList.toggle('active');
+            document.getElementById('menu-overlay').style.display = m.classList.contains('active') ? 'block' : 'none';
+        }
+
+        function toggleSearch() {
+            const s = document.getElementById('search-container'); s.style.display = (s.style.display === 'flex') ? 'none' : 'flex';
+            if(s.style.display === 'flex') document.getElementById('search-input').focus();
+        }
+
+        function setMediaType(type) {
+            activeType = type;
+            document.getElementById('type-movie').classList.toggle('active', type === 'movie');
+            document.getElementById('type-tv').classList.toggle('active', type === 'tv');
+            updateServiceRow(activeNetId, activeNetName, document.querySelector('.chip.active'));
+        }
+
+        async function updateServiceRow(id, name, el) {
+            activeNetId = id; activeNetName = name;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); if(el) el.classList.add('active');
+            const container = document.getElementById('dynamic-service-row');
+            container.innerHTML = `<div class="p-10 text-center animate-pulse text-cyan-400 uppercase text-[10px] font-black tracking-widest">Loading ${name}...</div>`;
+            try {
+                const res = await fetch(`https://api.themoviedb.org/3/discover/${activeType}?api_key=${apiKey}&with_networks=${id}&sort_by=popularity.desc`);
+                const data = await res.json(); container.innerHTML = '';
+                renderRow(container, `Popular on ${name}`, data.results.slice(0,12), false, activeType, true);
+            } catch(e) { container.innerHTML = ''; }
+        }
+        
+
+
+
+        function renderRow(target, title, items, isRanked, type, isYellow) {
+            const section = document.createElement('section'); section.className = "mt-8";
+            let cardsHTML = '';
+            items.forEach((item, i) => {
+                const img = item.poster_path ? `https://image.tmdb.org/t/p/w400${item.poster_path}` : `https://image.tmdb.org/t/p/w400${item.backdrop_path}`;
+                const action = `tabindex="0" onclick="location.href='player.html?id=${item.id}&type=${type}'" onkeydown="if(event.key==='Enter')location.href='player.html?id=${item.id}&type=${type}'"`;
+                if(isRanked) {
+                    cardsHTML += `<div class="ranking-card" ${action}><div class="overlay-number">${i+1}</div><img src="https://image.tmdb.org/t/p/w500${item.backdrop_path}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div><div class="absolute bottom-2 left-14 right-2 z-30 truncate text-[10px] font-black uppercase">${item.title || item.name}</div></div>`;
+                } else {
+                    cardsHTML += `<div class="portrait-card" ${action}><img src="${img}"><div class="portrait-overlay"></div><div class="absolute bottom-2 left-2 right-2 z-20 truncate text-[9px] font-bold uppercase">${item.title || item.name}</div></div>`;
+                }
+            });
+            section.innerHTML = `
+                <div class="px-6 mb-3 flex justify-between items-end">
+                    <h2 class="text-[11px] font-black uppercase ${isYellow?'text-yellow-500':'text-zinc-200'} tracking-widest">${title}</h2>
+                    <button tabindex="0" onclick="location.href='explore.html?type=${type}'" class="text-[9px] font-bold text-yellow-500 uppercase px-2 py-1 border border-cyan-400/20 rounded">See All</button>
+                </div>
+                <div class="flex overflow-x-auto no-scrollbar gap-4 px-6 pb-2">${cardsHTML}</div>`;
+            target.appendChild(section);
+        }
+
+        // INIT LOAD ALL DATA
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 1. Banner
+            const resB = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${apiKey}`);
+            const dataB = await resB.json(); const banner = document.getElementById('hero-banner');
+            dataB.results.slice(0,8).forEach(m => {
+                banner.innerHTML += `
+<div class="banner-slide flex-shrink-0 w-full h-full relative snap-start"
+tabindex="0"
+onclick="location.href='player.html?id=${m.id}&type=${m.media_type}'">
+
+<img src="https://image.tmdb.org/t/p/original${m.backdrop_path}"
+class="w-full h-full object-cover">
+
+<div class="banner-overlay"></div>
+
+<div class="absolute bottom-10 left-6">
+<h2 class="text-3xl font-black uppercase italic leading-none">
+${m.title || m.name}
+</h2>
+
+<button class="mt-4 bg-cyan-400 text-black text-[10px] font-black px-6 py-2 rounded-full uppercase">
+Watch Now
+</button>
+
+</div>
+</div>`;
+});
+
+            // 2. Load 5 Major Categories
+            const config = [
+                { t: "Top 10 Movies Today", u: "trending/movie/day", r: true, tp: 'movie' },
+                { t: "New Releases", u: "movie/now_playing", r: false, tp: 'movie' },
+                { t: "Trending TV Series", u: "trending/tv/day", r: true, tp: 'tv' },
+                { t: "Kids Zone 🧒", u: "discover/tv?with_genres=10762", r: false, tp: 'tv' },
+                { t: "Pinoy Pride 🇵🇭", u: "discover/movie?with_origin_country=PH", r: false, tp: 'movie' }
+            ];
+
+            const main = document.getElementById('main-content');
+            for(const row of config) {
+                try {
+                    const r = await fetch(`https://api.themoviedb.org/3/${row.u}${row.u.includes('?')?'&':'?'}api_key=${apiKey}`);
+                    const d = await r.json();
+                    renderRow(main, row.t, d.results.slice(0,10), row.r, row.tp, false);
+                } catch(e) {}
+            }
+            
+            // Auto-load First Network
+            updateServiceRow(213, 'Netflix', document.querySelector('.chip[data-id="213"]'));
+        });
+
+        // REMOTE SCROLL HELPER
+        document.addEventListener('keydown', (e) => {
+            setTimeout(() => {
+                const a = document.activeElement;
+                if(a && (a.classList.contains('portrait-card') || a.classList.contains('ranking-card') || a.tagName === 'BUTTON')) {
+                    a.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
+            }, 50);
+        });
+    </script>
+</body>
+    </html>

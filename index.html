@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KINGCINEMA | ACCESS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow: hidden; 
+        }
+        .glass { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        
+        input:focus, button:focus {
+            outline: none !important;
+            border-color: #eab308 !important;
+            background: #1a1a1a !important;
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.4);
+            transform: scale(1.03);
+            transition: all 0.2s ease-in-out;
+        }
+        button:focus {
+            background: #eab308 !important;
+            color: #000 !important;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div class="w-full max-w-sm p-10 glass rounded-[3rem] shadow-2xl border border-zinc-900">
+        <center>
+            <h1 class="font-['Orbitron'] text-4xl text-yellow-500 mb-2 italic tracking-tighter">CF2KGAMER TAMBAYAN PH</h1>
+            <p class="text-[10px] tracking-[5px] text-zinc-500 uppercase mb-10 font-bold">Premium Access Portal</p>
+        </center>
+        
+        <div class="space-y-5">
+            <div id="status-box" class="hidden p-4 rounded-2xl border text-center transition-all duration-300">
+                <p id="status-text" class="text-[10px] font-black uppercase tracking-widest"></p>
+            </div>
+
+            <input type="text" id="u" placeholder="Username" tabindex="1" 
+                class="w-full bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 outline-none text-sm transition-all">
+            
+            <input type="password" id="p" placeholder="Password" tabindex="2"
+                class="w-full bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 outline-none text-sm transition-all">
+            
+            <div class="pt-4 space-y-4">
+                <button onclick="auth('login')" id="btn-login" tabindex="3"
+                    class="w-full bg-yellow-500 py-5 rounded-2xl text-black font-black uppercase text-xs tracking-widest transition-all">
+                    Login Access
+                </button>
+                
+                <button onclick="auth('reg')" tabindex="4"
+                    class="w-full bg-zinc-900 py-4 rounded-2xl text-white font-bold text-[10px] uppercase tracking-widest border border-zinc-800 transition-all">
+                    Create Account
+                </button>
+            </div>
+        </div>
+        
+        <p class="text-center text-[8px] text-zinc-700 mt-8 uppercase tracking-widest">Navigate with D-Pad & Enter</p>
+    </div>
+
+    <script>
+        // --- CONNECTED SUPABASE ---
+        const SB_URL = "https://vlfptrvtsrsxvyeejlym.supabase.co";
+        const SB_KEY = "sb_publishable_SMQBqPekBeBpnnnfYg0s2Q_qM6H9qSA";
+        const _sb = supabase.createClient(SB_URL, SB_KEY);
+
+        // TV REMOTE "ENTER" KEY SUPPORT
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active.id === 'u' || active.id === 'p') auth('login');
+            }
+        });
+
+        function setStatus(msg, type) {
+            const box = document.getElementById('status-box');
+            const txt = document.getElementById('status-text');
+            box.className = `p-4 rounded-2xl border text-center transition-all duration-300 ${type === 'error' ? 'bg-red-500/10 border-red-500/30 text-red-500' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500'}`;
+            txt.innerText = msg;
+            box.classList.remove('hidden');
+        }
+
+        async function auth(mode) {
+            const u = document.getElementById('u').value.trim();
+            const p = document.getElementById('p').value.trim();
+            if(!u || !p) return setStatus("Please fill all fields", "error");
+
+            if(mode === 'reg') {
+                const { error } = await _sb.from('users').insert([{ username: u, password: p, status: 'pending' }]);
+                if(error) return setStatus("Username already taken!", "error");
+                setStatus("Account Created! Chat Admin to approve.", "success");
+            } else {
+                const { data, error } = await _sb.from('users').select('*').eq('username', u).eq('password', p).single();
+                
+                if(error || !data) return setStatus("Wrong username or password!", "error");
+                if(data.is_banned) return setStatus("Your account is BANNED!", "error");
+                if(data.status === 'pending') return setStatus("Account still PENDING!", "error");
+
+                // DEVICE LIMIT REMOVED HERE
+                // Lahat pwedeng pumasok, sa limitdev.js na ang harang.
+                localStorage.setItem('king_session', u);
+                window.location.href = "home.html";
+            }
+        }
+
+        window.onload = () => {
+            document.getElementById('u').focus();
+            if(localStorage.getItem('king_session')) window.location.href = "home.html";
+        };
+    </script>
+</body>
+</html>

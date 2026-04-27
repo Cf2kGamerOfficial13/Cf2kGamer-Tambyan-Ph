@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="www.varcel.com.js"></script>
+<script src="guardian.js"></script>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<title>CF2KGAMER TAMBAYAN PH</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+
+<style>
+body{
+background:
+radial-gradient(circle at top,#1a5ea5 0%,#0b2345 38%,#020814 100%);
+color:#fff;
+font-family:'Plus Jakarta Sans',sans-serif;
+overflow-x:hidden;
+}
+
+.no-scrollbar::-webkit-scrollbar{
+display:none;
+}
+
+/* TV focus */
+:focus{
+outline:none;
+border:2px solid #7ee6ff!important;
+transform:scale(1.05);
+z-index:50;
+box-shadow:
+0 0 18px rgba(0,220,255,.45),
+0 0 28px rgba(60,180,255,.25);
+}
+
+/* overlay */
+.menu-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,10,30,.75);
+display:none;
+z-index:450;
+}
+
+/* menu */
+#side-menu{
+position:fixed;
+top:0;
+left:-100%;
+width:75%;
+height:100%;
+z-index:500;
+
+background:rgba(8,30,58,.92);
+backdrop-filter:blur(24px);
+-webkit-backdrop-filter:blur(24px);
+
+border-right:1px solid rgba(130,220,255,.18);
+
+transition:.45s cubic-bezier(.4,0,.2,1);
+
+box-shadow:
+0 0 40px rgba(0,0,0,.45);
+}
+
+#side-menu.active{
+left:0;
+}
+
+.active-link{
+color:#8fefff!important;
+background:
+linear-gradient(
+90deg,
+rgba(40,130,255,.18),
+rgba(0,220,255,.08)
+);
+border-radius:14px;
+}
+
+/* header */
+.glass-nav{
+background:rgba(5,20,46,.72);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+
+border-bottom:1px solid rgba(120,220,255,.18);
+
+box-shadow:
+0 8px 30px rgba(0,0,0,.35),
+0 0 15px rgba(70,170,255,.1);
+}
+
+#explore-title{
+color:#c7f6ff!important;
+text-shadow:
+0 0 12px rgba(0,220,255,.25);
+}
+
+/* search box */
+.search-wrap{
+background:rgba(20,45,80,.35);
+backdrop-filter:blur(14px);
+border:1px solid rgba(120,220,255,.14);
+box-shadow:
+inset 0 1px 1px rgba(255,255,255,.04);
+}
+
+#inner-search{
+color:white;
+}
+
+#inner-search::placeholder{
+color:#8fdfff;
+}
+
+/* cards */
+.portrait-card{
+position:relative;
+width:100%;
+aspect-ratio:2/3;
+overflow:hidden;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+180deg,
+rgba(16,40,74,.72),
+rgba(7,20,38,.96)
+);
+
+border:1px solid rgba(120,220,255,.12);
+
+transition:.25s;
+cursor:pointer;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,.25);
+}
+
+.portrait-card:hover{
+transform:translateY(-4px) scale(1.02);
+box-shadow:
+0 0 18px rgba(0,210,255,.18);
+}
+
+.portrait-card img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.portrait-overlay{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+height:75%;
+background:
+linear-gradient(
+to top,
+rgba(2,10,22,.98) 10%,
+transparent 100%
+);
+z-index:10;
+}
+
+/* buttons */
+.start-btn{
+background:
+linear-gradient(
+135deg,
+#1d7fff,
+#44dfff
+)!important;
+
+color:#fff!important;
+
+box-shadow:
+0 0 20px rgba(0,200,255,.25);
+}
+
+/* nav links */
+nav a{
+border-radius:14px;
+transition:.2s;
+}
+
+nav a:hover{
+background:rgba(60,180,255,.08);
+color:#8feeff;
+}
+
+/* loader */
+.loader{
+width:34px;
+height:34px;
+border-radius:50%;
+border:3px solid rgba(100,220,255,.12);
+border-top:3px solid #66d2ff;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
+}
+</style>
+</head>
+
+<body class="pb-20">
+
+<div id="menu-overlay"
+class="menu-overlay"
+onclick="toggleMenu()"></div>
+
+<div
+id="side-menu"
+class="p-8 flex flex-col gap-8">
+
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-['Orbitron'] text-xl text-cyan-300 uppercase tracking-tighter">
+MENU
+</h2>
+
+<button
+tabindex="0"
+onclick="toggleMenu()"
+class="text-2xl text-zinc-400">
+✕
+</button>
+</div>
+
+<nav class="flex flex-col gap-4 font-bold text-lg text-zinc-300">
+
+<a href="index.html"
+tabindex="0"
+class="flex items-center gap-4 p-3">
+🏠 Home
+</a>
+
+<a href="explore.html?type=movie"
+tabindex="0"
+id="nav-movie"
+class="flex items-center gap-4 p-3">
+<img src="https://i.postimg.cc/SNPQ2q74/film.png"
+class="w-5 h-5 invert">
+<span>Movies</span>
+</a>
+
+<a href="explore.html?type=tv"
+tabindex="0"
+id="nav-tv"
+class="flex items-center gap-4 p-3">
+<img src="https://i.postimg.cc/TPVT4b8R/3283202.png"
+class="w-5 h-5 invert">
+<span>Series</span>
+</a>
+
+<a href="explore.html?type=kids"
+tabindex="0"
+id="nav-kids"
+class="flex items-center gap-4 p-3">
+<img src="https://i.postimg.cc/mryGwGMP/baby-boy.png"
+class="w-5 h-5 invert">
+<span>Kids Zone</span>
+</a>
+
+<a href="explore.html?type=ph"
+tabindex="0"
+id="nav-ph"
+class="flex items-center gap-4 p-3">
+<img src="https://i.postimg.cc/LXyKcBxS/red-flag.png"
+class="w-5 h-5 invert">
+<span>Pilipino</span>
+</a>
+
+</nav>
+</div>
+
+
+<header class="glass-nav sticky top-0 z-[100] p-4">
+
+<div class="flex flex-col gap-4">
+
+<div class="flex items-center justify-between">
+
+<div class="flex items-center gap-4">
+<button
+tabindex="0"
+onclick="toggleMenu()"
+class="text-2xl text-white">
+☰
+</button>
+
+<h1 id="explore-title"
+class="font-['Orbitron'] text-lg uppercase">
+EXPLORE
+</h1>
+
+</div>
+</div>
+
+<div class="search-wrap flex items-center px-4 py-3 rounded-2xl">
+<input
+tabindex="0"
+type="text"
+id="inner-search"
+placeholder="Search in this category..."
+class="bg-transparent w-full outline-none text-sm font-semibold">
+</div>
+
+</div>
+</header>
+
+
+<main class="p-3">
+
+<div
+id="explore-grid"
+class="grid grid-cols-3 gap-3">
+</div>
+
+
+<div
+id="initial-load-area"
+class="flex justify-center mt-20">
+
+<button
+tabindex="0"
+onclick="firstLoad()"
+class="start-btn px-12 py-4 rounded-full font-black text-xs uppercase tracking-widest transition">
+Start Exploring
+</button>
+
+</div>
+
+
+<div
+id="loading"
+class="flex flex-col items-center justify-center mt-10 mb-10 hidden">
+
+<div class="loader"></div>
+
+<p class="text-[9px] font-bold text-cyan-300 uppercase mt-4 tracking-widest">
+Syncing Content...
+</p>
+
+</div>
+
+</main>
+
+
+<script>
+const apiKey=
+"16902847bed95ac4ac7130b3f811f009";
+
+const urlParams=
+new URLSearchParams(
+window.location.search
+);
+
+const type=
+urlParams.get("type")||"movie";
+
+let currentPage=1;
+let isSearching=false;
+let isLoading=false;
+let hasTriggeredFirstLoad=false;
+
+function toggleMenu(){
+
+const sideMenu=
+document.getElementById(
+"side-menu"
+);
+
+document.getElementById(
+"menu-overlay"
+).style.display=
+sideMenu.classList.toggle("active")
+?"block":"none";
+
+}
+
+function setHighlight(){
+
+const navItem=
+document.getElementById(
+"nav-"+type
+);
+
+if(navItem){
+navItem.classList.add(
+"active-link"
+);
+}
+
+const titles={
+movie:"MOVIES",
+tv:"TV SERIES",
+kids:"KIDS ZONE",
+ph:"PINOY PRIDE"
+};
+
+document.getElementById(
+"explore-title"
+).innerText=
+titles[type]||"EXPLORE";
+
+}
+
+function firstLoad(){
+
+document.getElementById(
+"initial-load-area"
+).classList.add(
+"hidden"
+);
+
+hasTriggeredFirstLoad=true;
+
+fetchExplore(1);
+
+}
+
+async function fetchExplore(
+page=1,
+query=""
+){
+
+if(isLoading) return;
+
+isLoading=true;
+
+document
+.getElementById(
+"loading"
+)
+.classList.remove(
+"hidden"
+);
+
+let url=
+query
+?`https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}&page=${page}`
+:`https://api.themoviedb.org/3/${getCategoryPath()}&api_key=${apiKey}&page=${page}`;
+
+try{
+
+const response=
+await fetch(url);
+
+const data=
+await response.json();
+
+renderGrid(
+data.results,
+page===1
+);
+
+}catch(error){
+console.error(error);
+}
+
+finally{
+
+document
+.getElementById(
+"loading"
+)
+.classList.add(
+"hidden"
+);
+
+isLoading=false;
+
+}
+
+}
+
+function getCategoryPath(){
+
+if(type==="tv")
+return "discover/tv?sort_by=popularity.desc";
+
+if(type==="kids")
+return "discover/tv?with_genres=10762&sort_by=popularity.desc";
+
+if(type==="ph")
+return "discover/movie?with_origin_country=PH&sort_by=popularity.desc";
+
+return "discover/movie?sort_by=popularity.desc";
+}
+
+function renderGrid(
+results,
+isNewLoad
+){
+
+const grid=
+document.getElementById(
+"explore-grid"
+);
+
+if(isNewLoad)
+grid.innerHTML="";
+
+results.forEach(item=>{
+
+if(!item.poster_path)
+return;
+
+const mediaType=
+item.media_type||
+(type==="tv"||type==="kids"
+?"tv":"movie");
+
+const card=
+document.createElement(
+"div"
+);
+
+card.className=
+"portrait-card";
+
+card.tabIndex="0";
+
+card.onclick=
+()=>window.location.href=
+`player.html?id=${item.id}&type=${mediaType}`;
+
+card.onkeydown=(e)=>{
+if(e.key==="Enter")
+card.onclick();
+};
+
+card.innerHTML=`
+<img src="https://image.tmdb.org/t/p/w300${item.poster_path}" loading="lazy">
+
+<div class="portrait-overlay"></div>
+
+<div class="absolute bottom-2 left-2 right-2 z-20">
+<p class="text-[8px] font-black truncate text-zinc-100 uppercase">
+${item.title||item.name}
+</p>
+
+<p class="text-[7px] text-cyan-300 font-bold">
+★ ${item.vote_average?item.vote_average.toFixed(1):"0.0"}
+</p>
+</div>
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+window.onscroll=()=>{
+
+if(
+!hasTriggeredFirstLoad||
+isSearching
+)return;
+
+if(
+window.innerHeight+
+window.scrollY>=
+document.body.offsetHeight-1000
+){
+
+if(!isLoading){
+
+currentPage++;
+
+fetchExplore(
+currentPage
+);
+
+}
+
+}
+
+};
+
+let searchTimer;
+
+document
+.getElementById(
+"inner-search"
+)
+.addEventListener(
+"input",
+(e)=>{
+
+clearTimeout(
+searchTimer
+);
+
+searchTimer=
+setTimeout(()=>{
+
+const query=
+e.target.value;
+
+if(query.length>2){
+
+isSearching=true;
+
+document
+.getElementById(
+"initial-load-area"
+)
+.classList.add(
+"hidden"
+);
+
+fetchExplore(
+1,
+query
+);
+
+}else if(
+query.length===0
+){
+
+isSearching=false;
+
+if(
+hasTriggeredFirstLoad
+)
+fetchExplore(1);
+
+}
+
+},500);
+
+}
+);
+
+document.addEventListener(
+"keydown",
+(e)=>{
+
+if(
+[
+"ArrowUp",
+"ArrowDown",
+"ArrowLeft",
+"ArrowRight"
+].includes(e.key)
+){
+
+setTimeout(()=>{
+
+const active=
+document.activeElement;
+
+if(
+active &&
+active.classList.contains(
+"portrait-card"
+)
+){
+
+active.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+}
+
+},10);
+
+}
+
+}
+);
+
+window.onload=
+setHighlight;
+</script>
+
+</body>
+</html>
