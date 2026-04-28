@@ -17,22 +17,16 @@ content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no
 --primary:#66c8ff;
 --accent:#9df4ff;
 --bg1:#020814;
---bg2:#081d38;
 --glass:rgba(11,33,60,.68);
 --border:rgba(125,220,255,.22);
 }
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 html,body{
 height:100%;
 overflow:hidden;
 font-family:Inter,sans-serif;
+background:radial-gradient(circle at top,#1a5ea5 0%,#0b2447 38%,#020814 100%);
 color:#fff;
-background:
-radial-gradient(circle at top,#1a5ea5 0%,#0b2447 38%,#020814 100%);
 }
 .wrapper{
 height:100%;
@@ -48,9 +42,6 @@ justify-content:space-between;
 background:rgba(5,22,46,.72);
 backdrop-filter:blur(18px);
 border-bottom:1px solid rgba(120,210,255,.25);
-box-shadow:
-0 8px 25px rgba(0,0,0,.35),
-0 0 20px rgba(70,170,255,.15);
 }
 .back-btn{
 text-decoration:none;
@@ -65,23 +56,20 @@ background:linear-gradient(135deg,#147dff,#35d8ff);
 .brand-title{
 font-family:Orbitron;
 font-size:15px;
-letter-spacing:1px;
 font-weight:800;
-color:#c9f6ff;
 }
 #total-channels{
-font-size:9px;
+font-size:10px;
 margin-top:4px;
 font-family:Orbitron;
-color:#88dfff;
 }
 #now-playing{
-width:90px;
-text-align:right;
 font-size:10px;
 font-family:Orbitron;
-white-space:nowrap;
+width:100px;
+text-align:right;
 overflow:hidden;
+white-space:nowrap;
 text-overflow:ellipsis;
 }
 .main-layout{
@@ -106,21 +94,17 @@ position:absolute;
 top:15px;
 left:15px;
 display:none;
-padding:10px 16px;
+padding:10px 15px;
 border-radius:14px;
-background:rgba(8,35,70,.85);
-font-size:11px;
+background:rgba(8,35,70,.9);
 font-family:Orbitron;
+font-size:11px;
 }
 .sidebar{
 flex:1;
 display:flex;
 flex-direction:column;
-background:linear-gradient(
-180deg,
-rgba(7,28,52,.92),
-rgba(3,15,30,.97)
-);
+background:linear-gradient(180deg,#06192f,#020d18);
 overflow:hidden;
 }
 .search-area{
@@ -129,7 +113,7 @@ border-bottom:1px solid var(--border);
 }
 #channel-search{
 width:100%;
-padding:14px 15px;
+padding:14px;
 border-radius:16px;
 border:1px solid rgba(110,200,255,.22);
 background:rgba(15,45,78,.6);
@@ -181,9 +165,8 @@ font-weight:700;
 font-size:10px;
 margin-top:3px;
 font-family:Orbitron;
-color:#7fe3ff;
 }
-@media (orientation:landscape){
+@media(orientation:landscape){
 .main-layout{
 flex-direction:row;
 height:calc(100vh - 70px);
@@ -195,7 +178,7 @@ aspect-ratio:auto;
 }
 .sidebar{
 flex:1;
-max-width:430px;
+max-width:420px;
 }
 }
 </style>
@@ -205,15 +188,12 @@ max-width:430px;
 <div class="wrapper">
 
 <header class="nav-bar">
-<a href="index.html" class="back-btn">
-EXIT
-</a>
+<a href="index.html" class="back-btn">EXIT</a>
 
 <div style="text-align:center">
-<h1 class="brand-title">
+<div class="brand-title">
 CF2KGAMER TAMBAYAN PH
-</h1>
-
+</div>
 <div id="total-channels">
 0 CHANNELS
 </div>
@@ -245,8 +225,8 @@ playsinline>
 
 <div class="search-area">
 <input
-type="text"
 id="channel-search"
+type="text"
 placeholder="Search channels..."
 onkeyup="filterChannels()">
 </div>
@@ -263,86 +243,99 @@ id="channel-list-container">
 
 <script>
 let channels=[];
-const videoElement=document.getElementById("video");
-const statusMsg=document.getElementById("status-msg");
-
 let hlsPlayer=null;
 let shakaPlayer=null;
 
-
-
-async function loadChannels(){
-
-try{
-
-statusMsg.style.display="block";
-statusMsg.innerText="LOADING CHANNELS...";
-
-const res=await fetch(
-"channels.js?v="+Date.now(),
-{
-cache:"no-store",
-headers:{
-"Cache-Control":"no-cache",
-"Pragma":"no-cache"
-}
-}
+const videoElement=
+document.getElementById(
+"video"
 );
 
-let txt=await res.text();
-
-
-
-if(
-txt.includes("const channels")
-||
-txt.includes("let channels")
-){
-
-txt=txt
-.replace("const channels","channels")
-.replace("let channels","channels");
-
-eval(txt);
-
-}
-
-if(
-!Array.isArray(channels)
-||
-channels.length===0
-){
-throw "no channels";
-}
-
-statusMsg.style.display="none";
-
-return true;
-
-}catch(e){
-
-try{
-
-const fallback=await fetch(
-"./channels.json?v="+Date.now(),
-{
-cache:"no-store"
-}
+const statusMsg=
+document.getElementById(
+"status-msg"
 );
 
-channels=await fallback.json();
 
-return true;
 
-}catch(x){
+function loadChannels(){
 
-statusMsg.style.display="block";
-statusMsg.innerText="CHANNEL LOAD FAILED";
-return false;
+return new Promise(
+(resolve,reject)=>{
 
+statusMsg.style.display=
+"block";
+
+statusMsg.innerText=
+"LOADING CHANNELS...";
+
+
+const s=
+document.createElement(
+"script"
+);
+
+s.src=
+"channels.js?cf="+
+Date.now()+
+Math.random();
+
+s.async=true;
+
+s.onload=()=>{
+
+if(
+Array.isArray(channels)
+&&
+channels.length
+){
+resolve(true);
+return;
 }
 
+reject();
+
+};
+
+
+s.onerror=()=>{
+
+const backup=
+document.createElement(
+"script"
+);
+
+backup.src=
+"chlist.js?v="+
+Date.now();
+
+backup.onload=()=>{
+
+if(
+Array.isArray(channels)
+&&
+channels.length
+){
+resolve(true);
+}else{
+reject();
 }
+
+};
+
+backup.onerror=reject;
+
+document.head.appendChild(
+backup
+);
+
+};
+
+document.head.appendChild(
+s
+);
+
+});
 
 }
 
@@ -353,35 +346,49 @@ async function initApp(){
 shaka.polyfill.installAll();
 
 shakaPlayer=
-new shaka.Player(videoElement);
+new shaka.Player(
+videoElement
+);
 
 shakaPlayer.addEventListener(
-'error',
+"error",
 ()=>{
-statusMsg.style.display='block';
+statusMsg.style.display=
+"block";
 statusMsg.innerText=
 "STREAM ERROR";
 }
 );
 
-let loaded=
+try{
+
 await loadChannels();
 
-if(loaded){
+statusMsg.style.display=
+"none";
 
 renderChannels();
 
-if(channels.length){
-
 setTimeout(()=>{
-let f=
+
+let first=
 document.querySelector(
 ".channel-item"
 );
-if(f)f.click();
-},800);
 
+if(first){
+first.click();
 }
+
+},600);
+
+}catch(e){
+
+statusMsg.style.display=
+"block";
+
+statusMsg.innerText=
+"CHANNEL LOAD FAILED";
 
 }
 
@@ -395,7 +402,9 @@ element
 ){
 
 document
-.querySelectorAll(".channel-item")
+.querySelectorAll(
+".channel-item"
+)
 .forEach(el=>
 el.classList.remove(
 "active"
@@ -406,10 +415,10 @@ element.classList.add(
 "active"
 );
 
-document
-.getElementById(
+document.getElementById(
 "now-playing"
-).innerText=ch.title;
+).innerText=
+ch.title;
 
 statusMsg.style.display=
 "block";
@@ -424,9 +433,10 @@ hlsPlayer=null;
 
 await shakaPlayer.unload();
 
-let url=ch.file;
-
 try{
+
+let url=
+ch.file;
 
 if(
 url.includes(".mpd")
@@ -445,11 +455,15 @@ ch.drm.clearkey.key
 
 }
 
-await shakaPlayer.load(url);
+await shakaPlayer.load(
+url
+);
 
 }else{
 
-if(Hls.isSupported()){
+if(
+Hls.isSupported()
+){
 
 hlsPlayer=
 new Hls();
@@ -464,7 +478,8 @@ videoElement
 
 }else{
 
-videoElement.src=url;
+videoElement.src=
+url;
 
 }
 
@@ -475,7 +490,7 @@ videoElement.play();
 setTimeout(()=>{
 statusMsg.style.display=
 "none";
-},2000);
+},1500);
 
 }catch(e){
 
@@ -521,12 +536,10 @@ item.innerHTML=`
 class="ch-logo"
 src="${ch.image||''}"
 onerror="this.src='https://via.placeholder.com/70x50/111/66c8ff?text=TV'">
-
 <div>
 <div class="ch-title">
 ${ch.title}
 </div>
-
 <div class="ch-status">
 ● ONLINE
 </div>
@@ -566,8 +579,7 @@ document
 .forEach(item=>{
 
 let t=
-item
-.querySelector(
+item.querySelector(
 ".ch-title"
 )
 .textContent
@@ -593,4 +605,4 @@ initApp
 </script>
 
 </body>
-</html>
+  </html>
