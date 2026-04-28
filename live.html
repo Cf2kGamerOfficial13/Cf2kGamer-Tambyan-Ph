@@ -12,12 +12,6 @@ content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.9.3/shaka-player.compiled.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-<script src="limitdev.js"></script>
-<script src="www.varcel.com.js"></script>
-<script src="security.js"></script>
-<script src="ads-config.js"></script>
-<script src="guardian.js"></script>
-
 <style>
 :root{
 --primary:#66c8ff;
@@ -27,11 +21,13 @@ content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no
 --glass:rgba(11,33,60,.68);
 --border:rgba(125,220,255,.22);
 }
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
 }
+
 html,body{
 height:100%;
 overflow:hidden;
@@ -40,17 +36,19 @@ color:#fff;
 background:
 radial-gradient(circle at top,#1a5ea5 0%,#0b2447 38%,#020814 100%);
 }
+
 .wrapper{
 height:100%;
 display:flex;
 flex-direction:column;
 }
+
 .nav-bar{
 height:70px;
 padding:0 18px;
-display:flex;
+display:grid;
+grid-template-columns:1fr auto 1fr;
 align-items:center;
-justify-content:space-between;
 background:rgba(5,22,46,.72);
 backdrop-filter:blur(18px);
 border-bottom:1px solid rgba(120,210,255,.25);
@@ -58,16 +56,12 @@ box-shadow:
 0 8px 25px rgba(0,0,0,.35),
 0 0 20px rgba(70,170,255,.15);
 }
-.back-btn{
-text-decoration:none;
-padding:9px 18px;
-border-radius:14px;
-font-size:11px;
-font-weight:700;
-font-family:Orbitron;
-color:#fff;
-background:linear-gradient(135deg,#147dff,#35d8ff);
+
+.brand-wrap{
+justify-self:center;
+text-align:center;
 }
+
 .brand-title{
 font-family:Orbitron;
 font-size:15px;
@@ -75,13 +69,16 @@ letter-spacing:1px;
 font-weight:800;
 color:#c9f6ff;
 }
+
 #total-channels{
 font-size:9px;
 margin-top:4px;
 font-family:Orbitron;
 color:#88dfff;
 }
+
 #now-playing{
+justify-self:end;
 width:90px;
 text-align:right;
 font-size:10px;
@@ -90,23 +87,27 @@ white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
 }
+
 .main-layout{
 flex:1;
 display:flex;
 flex-direction:column;
 overflow:hidden;
 }
+
 .video-box{
 position:relative;
 width:100%;
 aspect-ratio:16/9;
 background:#000;
 }
+
 #video{
 width:100%;
 height:100%;
 background:#000;
 }
+
 #status-msg{
 position:absolute;
 top:15px;
@@ -118,6 +119,7 @@ background:rgba(8,35,70,.85);
 font-size:11px;
 font-family:Orbitron;
 }
+
 .sidebar{
 flex:1;
 display:flex;
@@ -129,10 +131,12 @@ rgba(3,15,30,.97)
 );
 overflow:hidden;
 }
+
 .search-area{
 padding:14px;
 border-bottom:1px solid var(--border);
 }
+
 #channel-search{
 width:100%;
 padding:14px 15px;
@@ -142,6 +146,7 @@ background:rgba(15,45,78,.6);
 color:#fff;
 outline:none;
 }
+
 .scroll-list{
 flex:1;
 overflow-y:auto;
@@ -149,17 +154,19 @@ padding:14px;
 display:grid;
 gap:13px;
 }
+
 .channel-item{
 display:flex;
 align-items:center;
 gap:12px;
 padding:12px;
 border-radius:18px;
-background:var(--glass);
-border:1px solid var(--border);
+background:rgba(11,33,60,.68);
+border:1px solid rgba(125,220,255,.22);
 cursor:pointer;
 transition:.25s;
 }
+
 .channel-item:hover,
 .channel-item.active{
 transform:translateY(-2px);
@@ -169,9 +176,11 @@ rgba(36,125,255,.9),
 rgba(0,215,255,.8)
 );
 }
+
 .channel-item.active .ch-title{
 color:#001426;
 }
+
 .ch-logo{
 width:68px;
 height:44px;
@@ -179,26 +188,31 @@ border-radius:12px;
 object-fit:contain;
 background:#03111f;
 }
+
 .ch-title{
 font-size:13px;
 font-weight:700;
 }
+
 .ch-status{
 font-size:10px;
 margin-top:3px;
 font-family:Orbitron;
 color:#7fe3ff;
 }
+
 @media (orientation:landscape){
 .main-layout{
 flex-direction:row;
 height:calc(100vh - 70px);
 }
+
 .video-box{
 flex:2.3;
 height:100%;
 aspect-ratio:auto;
 }
+
 .sidebar{
 flex:1;
 max-width:430px;
@@ -211,11 +225,9 @@ max-width:430px;
 <div class="wrapper">
 
 <header class="nav-bar">
-<a href="index.html" class="back-btn">
-EXIT
-</a>
+<div></div>
 
-<div style="text-align:center">
+<div class="brand-wrap">
 <h1 class="brand-title">
 CF2KGAMER TAMBAYAN PH
 </h1>
@@ -233,7 +245,6 @@ LIVE
 <main class="main-layout">
 
 <section class="video-box">
-
 <div id="status-msg">
 LOADING...
 </div>
@@ -244,7 +255,6 @@ controls
 autoplay
 playsinline>
 </video>
-
 </section>
 
 <aside class="sidebar">
@@ -275,7 +285,8 @@ const statusMsg=document.getElementById("status-msg");
 let hlsPlayer=null;
 let shakaPlayer=null;
 
-
+const CHANNELS_URL=
+"https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.js";
 
 async function loadChannels(){
 
@@ -285,32 +296,28 @@ statusMsg.style.display="block";
 statusMsg.innerText="LOADING CHANNELS...";
 
 const res=await fetch(
-"channels.js?v="+Date.now(),
+CHANNELS_URL+"?v="+Date.now(),
 {
-cache:"no-store",
-headers:{
-"Cache-Control":"no-cache",
-"Pragma":"no-cache"
-}
+cache:"no-store"
 }
 );
 
+if(!res.ok){
+throw "github error";
+}
+
 let txt=await res.text();
-
-
 
 if(
 txt.includes("const channels")
 ||
 txt.includes("let channels")
 ){
-
 txt=txt
 .replace("const channels","channels")
 .replace("let channels","channels");
 
 eval(txt);
-
 }
 
 if(
@@ -318,41 +325,23 @@ if(
 ||
 channels.length===0
 ){
-throw "no channels";
+throw "empty";
 }
 
 statusMsg.style.display="none";
-
 return true;
 
 }catch(e){
 
-try{
-
-const fallback=await fetch(
-"./channels.json?v="+Date.now(),
-{
-cache:"no-store"
-}
-);
-
-channels=await fallback.json();
-
-return true;
-
-}catch(x){
-
 statusMsg.style.display="block";
 statusMsg.innerText="CHANNEL LOAD FAILED";
+console.log(e);
+
 return false;
 
 }
 
 }
-
-}
-
-
 
 async function initApp(){
 
@@ -362,11 +351,10 @@ shakaPlayer=
 new shaka.Player(videoElement);
 
 shakaPlayer.addEventListener(
-'error',
-()=>{
-statusMsg.style.display='block';
-statusMsg.innerText=
-"STREAM ERROR";
+"error",
+function(){
+statusMsg.style.display="block";
+statusMsg.innerText="STREAM ERROR";
 }
 );
 
@@ -379,12 +367,17 @@ renderChannels();
 
 if(channels.length){
 
-setTimeout(()=>{
-let f=
+setTimeout(function(){
+
+let first=
 document.querySelector(
 ".channel-item"
 );
-if(f)f.click();
+
+if(first){
+first.click();
+}
+
 },800);
 
 }
@@ -393,8 +386,6 @@ if(f)f.click();
 
 }
 
-
-
 async function switchChannel(
 ch,
 element
@@ -402,11 +393,9 @@ element
 
 document
 .querySelectorAll(".channel-item")
-.forEach(el=>
-el.classList.remove(
-"active"
-)
-);
+.forEach(function(el){
+el.classList.remove("active");
+});
 
 element.classList.add(
 "active"
@@ -417,11 +406,8 @@ document
 "now-playing"
 ).innerText=ch.title;
 
-statusMsg.style.display=
-"block";
-
-statusMsg.innerText=
-"CONNECTING...";
+statusMsg.style.display="block";
+statusMsg.innerText="CONNECTING...";
 
 if(hlsPlayer){
 hlsPlayer.destroy();
@@ -438,7 +424,10 @@ if(
 url.includes(".mpd")
 ){
 
-if(ch.drm){
+if(
+ch.drm &&
+ch.drm.clearkey
+){
 
 shakaPlayer.configure({
 drm:{
@@ -451,7 +440,9 @@ ch.drm.clearkey.key
 
 }
 
-await shakaPlayer.load(url);
+await shakaPlayer.load(
+url
+);
 
 }else{
 
@@ -478,24 +469,18 @@ videoElement.src=url;
 
 videoElement.play();
 
-setTimeout(()=>{
-statusMsg.style.display=
-"none";
-},2000);
+setTimeout(function(){
+statusMsg.style.display="none";
+},1500);
 
 }catch(e){
 
-statusMsg.style.display=
-"block";
-
-statusMsg.innerText=
-"CHANNEL OFFLINE";
+statusMsg.style.display="block";
+statusMsg.innerText="CHANNEL OFFLINE";
 
 }
 
 }
-
-
 
 function renderChannels(){
 
@@ -512,7 +497,7 @@ channels.length+
 
 container.innerHTML="";
 
-channels.forEach(ch=>{
+channels.forEach(function(ch){
 
 let item=
 document.createElement(
@@ -523,8 +508,7 @@ item.className=
 "channel-item";
 
 item.innerHTML=`
-<img
-class="ch-logo"
+<img class="ch-logo"
 src="${ch.image||''}"
 onerror="this.src='https://via.placeholder.com/70x50/111/66c8ff?text=TV'">
 
@@ -539,11 +523,12 @@ ${ch.title}
 </div>
 `;
 
-item.onclick=
-()=>switchChannel(
+item.onclick=function(){
+switchChannel(
 ch,
 item
 );
+};
 
 container.appendChild(
 item
@@ -552,8 +537,6 @@ item
 });
 
 }
-
-
 
 function filterChannels(){
 
@@ -569,11 +552,10 @@ document
 .querySelectorAll(
 ".channel-item"
 )
-.forEach(item=>{
+.forEach(function(item){
 
 let t=
-item
-.querySelector(
+item.querySelector(
 ".ch-title"
 )
 .textContent
@@ -589,8 +571,6 @@ t.includes(val)
 });
 
 }
-
-
 
 document.addEventListener(
 "DOMContentLoaded",
