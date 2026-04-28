@@ -52,9 +52,6 @@ align-items:center;
 background:rgba(5,22,46,.72);
 backdrop-filter:blur(18px);
 border-bottom:1px solid rgba(120,210,255,.25);
-box-shadow:
-0 8px 25px rgba(0,0,0,.35),
-0 0 20px rgba(70,170,255,.15);
 }
 
 .brand-wrap{
@@ -65,7 +62,6 @@ text-align:center;
 .brand-title{
 font-family:Orbitron;
 font-size:15px;
-letter-spacing:1px;
 font-weight:800;
 color:#c9f6ff;
 }
@@ -231,7 +227,6 @@ max-width:430px;
 <h1 class="brand-title">
 CF2KGAMER TAMBAYAN PH
 </h1>
-
 <div id="total-channels">
 0 CHANNELS
 </div>
@@ -245,6 +240,7 @@ LIVE
 <main class="main-layout">
 
 <section class="video-box">
+
 <div id="status-msg">
 LOADING...
 </div>
@@ -255,6 +251,7 @@ controls
 autoplay
 playsinline>
 </video>
+
 </section>
 
 <aside class="sidebar">
@@ -279,46 +276,45 @@ id="channel-list-container">
 
 <script>
 let channels=[];
-const videoElement=document.getElementById("video");
-const statusMsg=document.getElementById("status-msg");
+
+const videoElement=
+document.getElementById("video");
+
+const statusMsg=
+document.getElementById("status-msg");
 
 let hlsPlayer=null;
 let shakaPlayer=null;
 
+
+/* CHANGE TO YOUR JSON FILE */
 const CHANNELS_URL=
-"https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.js";
+"https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.json";
+
 
 async function loadChannels(){
 
 try{
 
 statusMsg.style.display="block";
-statusMsg.innerText="LOADING CHANNELS...";
+statusMsg.innerText=
+"LOADING CHANNELS...";
 
-const res=await fetch(
-CHANNELS_URL+"?v="+Date.now(),
+const res=
+await fetch(
+CHANNELS_URL+
+"?v="+Date.now(),
 {
 cache:"no-store"
 }
 );
 
 if(!res.ok){
-throw "github error";
+throw "json error";
 }
 
-let txt=await res.text();
-
-if(
-txt.includes("const channels")
-||
-txt.includes("let channels")
-){
-txt=txt
-.replace("const channels","channels")
-.replace("let channels","channels");
-
-eval(txt);
-}
+channels=
+await res.json();
 
 if(
 !Array.isArray(channels)
@@ -328,14 +324,23 @@ channels.length===0
 throw "empty";
 }
 
+document.getElementById(
+"total-channels"
+).innerText=
+channels.length+
+" CHANNELS";
+
 statusMsg.style.display="none";
+
 return true;
 
 }catch(e){
 
-statusMsg.style.display="block";
-statusMsg.innerText="CHANNEL LOAD FAILED";
 console.log(e);
+
+statusMsg.style.display="block";
+statusMsg.innerText=
+"CHANNEL LOAD FAILED";
 
 return false;
 
@@ -343,18 +348,23 @@ return false;
 
 }
 
+
+
 async function initApp(){
 
 shaka.polyfill.installAll();
 
 shakaPlayer=
-new shaka.Player(videoElement);
+new shaka.Player(
+videoElement
+);
 
 shakaPlayer.addEventListener(
 "error",
 function(){
 statusMsg.style.display="block";
-statusMsg.innerText="STREAM ERROR";
+statusMsg.innerText=
+"STREAM ERROR";
 }
 );
 
@@ -386,15 +396,21 @@ first.click();
 
 }
 
+
+
 async function switchChannel(
 ch,
 element
 ){
 
 document
-.querySelectorAll(".channel-item")
+.querySelectorAll(
+".channel-item"
+)
 .forEach(function(el){
-el.classList.remove("active");
+el.classList.remove(
+"active"
+);
 });
 
 element.classList.add(
@@ -404,10 +420,13 @@ element.classList.add(
 document
 .getElementById(
 "now-playing"
-).innerText=ch.title;
+).innerText=
+ch.title;
 
 statusMsg.style.display="block";
-statusMsg.innerText="CONNECTING...";
+statusMsg.innerText=
+"CONNECTING...";
+
 
 if(hlsPlayer){
 hlsPlayer.destroy();
@@ -476,11 +495,14 @@ statusMsg.style.display="none";
 }catch(e){
 
 statusMsg.style.display="block";
-statusMsg.innerText="CHANNEL OFFLINE";
+statusMsg.innerText=
+"CHANNEL OFFLINE";
 
 }
 
 }
+
+
 
 function renderChannels(){
 
@@ -488,12 +510,6 @@ let container=
 document.getElementById(
 "channel-list-container"
 );
-
-document.getElementById(
-"total-channels"
-).innerText=
-channels.length+
-" CHANNELS";
 
 container.innerHTML="";
 
@@ -537,6 +553,8 @@ item
 });
 
 }
+
+
 
 function filterChannels(){
 
