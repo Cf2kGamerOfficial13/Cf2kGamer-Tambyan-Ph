@@ -175,20 +175,20 @@ flex-direction:column;
     
     <div id="side-menu" class="p-8 flex flex-col">
         <div class="flex justify-between items-center mb-10">
-            <h2 class="font-['Orbitron'] text-xl text-yellow-500 uppercase tracking-widest">Cf2k Menu</h2>
+            <h2 class="font-['Orbitron'] text-xl text-cyan-400 uppercase tracking-widest">Cf2k Menu</h2>
             <button onclick="toggleMenu()" class="text-2xl text-cyan-300">✕</button>
         </div>
         <nav class="flex flex-col gap-6 font-bold text-lg text-zinc-300">
-            <a href="explore.html?type=movie" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+            <a href="explore.html?type=movie" tabindex="0" class="flex items-center gap-4 hover:text-cyan-400 focus:text-cyan-400">
                 <img src="https://i.postimg.cc/SNPQ2q74/film.png" class="w-6 h-6 invert"> <span>Movies</span>
             </a>
-            <a href="explore.html?type=tv" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+            <a href="explore.html?type=tv" tabindex="0" class="flex items-center gap-4 hover:text-cyan-400 focus:text-cyan-400">
                 <img src="https://i.postimg.cc/TPVT4b8R/3283202.png" class="w-6 h-6 invert"> <span>TV Series</span>
             </a>
-            <a href="explore.html?type=kids" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+            <a href="explore.html?type=kids" tabindex="0" class="flex items-center gap-4 hover:text-cyan-400 focus:text-cyan-400">
                 <img src="https://i.postimg.cc/mryGwGMP/baby-boy.png" class="w-6 h-6 invert"> <span>Kids Zone</span>
             </a>
-            <a href="explore.html?type=ph" tabindex="0" class="flex items-center gap-4 hover:text-yellow-500 focus:text-yellow-500">
+            <a href="explore.html?type=ph" tabindex="0" class="flex items-center gap-4 hover:text-cyan-400 focus:text-cyan-400">
                 <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png" class="w-6 h-6 invert"> <span>Pinoy Pride</span>
             </a>
            
@@ -210,7 +210,7 @@ flex-direction:column;
     <header class="sticky top-0 z-[100] p-4 bg-black/90 backdrop-blur-md border-b border-white/5">
         <div class="flex justify-between items-center px-2">
             <div class="flex items-center gap-4">
-                <button tabindex="0" onclick="toggleMenu()" class="text-2xl focus:text-yellow-500">☰</button>
+                <button tabindex="0" onclick="toggleMenu()" class="text-2xl focus:text-cyan-400">☰</button>
                 <h1 class="font-['Orbitron'] text-xl text-cyan-400 tracking-tighter uppercase">CF2KGAMER TAMBAYAN PH</h1>
             </div>
             <div class="flex gap-4 items-center">
@@ -218,7 +218,7 @@ flex-direction:column;
                     <img src="https://i.postimg.cc/DzgtGPk7/search-interface-symbol.png" class="w-5 h-5 invert">
                 </button>
                 <div tabindex="0" class="w-9 h-9 rounded-full bg-zinc-800 border border-cyan-400/50 flex items-center justify-center overflow-hidden">
-                    <span class="text-[10px] font-black text-yellow-500">CF2K</span>
+                    <span class="text-[10px] font-black text-cyan-400">CF2K</span>
                 </div>
             </div>
         </div>
@@ -249,7 +249,7 @@ flex-direction:column;
 
     <div id="search-container">
         <div class="p-4 flex items-center gap-4 bg-zinc-900 border-b border-white/10">
-            <button tabindex="0" onclick="toggleSearch()" class="text-2xl focus:text-yellow-500">✕</button>
+            <button tabindex="0" onclick="toggleSearch()" class="text-2xl focus:text-cyan-400">✕</button>
             <input tabindex="0" type="text" id="search-input" placeholder="Search movies, series..." class="bg-transparent w-full p-3 outline-none text-white text-lg">
         </div>
         <div id="search-results" class="flex-1 overflow-y-auto p-6 grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
@@ -298,7 +298,7 @@ flex-direction:column;
             activeNetId = id; activeNetName = name;
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); if(el) el.classList.add('active');
             const container = document.getElementById('dynamic-service-row');
-            container.innerHTML = `<div class="p-10 text-center animate-pulse text-cyan-400 uppercase text-[10px] font-black tracking-widest">Loading ${name}...</div>`;
+            container.innerHTML = `<div class="p-10 text-center animate-pulse text-cyan-500 uppercase text-[10px] font-black tracking-widest">Loading ${name}...</div>`;
             try {
                 const res = await fetch(`https://api.themoviedb.org/3/discover/${activeType}?api_key=${apiKey}&with_networks=${id}&sort_by=popularity.desc`);
                 const data = await res.json(); container.innerHTML = '';
@@ -323,8 +323,8 @@ flex-direction:column;
             });
             section.innerHTML = `
                 <div class="px-6 mb-3 flex justify-between items-end">
-                    <h2 class="text-[11px] font-black uppercase ${isYellow?'text-yellow-500':'text-zinc-200'} tracking-widest">${title}</h2>
-                    <button tabindex="0" onclick="location.href='explore.html?type=${type}'" class="text-[9px] font-bold text-yellow-500 uppercase px-2 py-1 border border-cyan-400/20 rounded">See All</button>
+                    <h2 class="text-[11px] font-black uppercase ${isYellow?'text-cyan-400':'text-zinc-200'} tracking-widest">${title}</h2>
+                    <button tabindex="0" onclick="location.href='explore.html?type=${type}'" class="text-[9px] font-bold text-cyan-400 uppercase px-2 py-1 border border-cyan-400/20 rounded">See All</button>
                 </div>
                 <div class="flex overflow-x-auto no-scrollbar gap-4 px-6 pb-2">${cardsHTML}</div>`;
             target.appendChild(section);
