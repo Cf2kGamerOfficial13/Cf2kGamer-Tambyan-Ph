@@ -75,7 +75,6 @@ box-shadow:0 0 18px rgba(0,200,255,.25);
 background:rgba(10,30,56,.75);
 border:1px solid rgba(120,220,255,.12);
 border-radius:12px;
-transition:.2s;
 font-size:11px;
 font-weight:800;
 color:#8ddfff;
@@ -100,26 +99,6 @@ border:2px solid #67d6ff;
 box-shadow:0 0 14px rgba(0,200,255,.2);
 }
 
-.fs-btn{
-background:linear-gradient(
-135deg,
-#1d7fff,
-#47ddff
-);
-border:none;
-color:white;
-box-shadow:0 0 18px rgba(0,200,255,.2);
-min-height:44px;
-min-width:125px;
-cursor:pointer;
-touch-action:manipulation;
--webkit-tap-highlight-color:transparent;
-}
-
-.fs-btn:active{
-transform:scale(.96);
-}
-
 .panel{
 background:linear-gradient(
 180deg,
@@ -141,11 +120,6 @@ select{
 background:#0d2444!important;
 border:1px solid rgba(120,220,255,.2)!important;
 color:#7ee7ff!important;
-}
-
-button:focus{
-outline:none;
-box-shadow:0 0 18px rgba(0,220,255,.35);
 }
 
 .float-fs{
@@ -184,15 +158,6 @@ class="text-cyan-200 text-[10px] font-bold uppercase tracking-widest">
 Reload Player
 </button>
 
-<div class="h-4 w-[1px] bg-cyan-900"></div>
-
-<button
-onclick="goFullScreen(event)"
-type="button"
-class="fs-btn text-[10px] font-bold uppercase tracking-widest px-4 py-3 rounded-xl">
-⛶ FULLSCREEN
-</button>
-
 </div>
 
 
@@ -217,21 +182,18 @@ allow="autoplay; fullscreen">
 
 <div class="panel p-5 mb-6">
 
-<h2
-id="title"
-class="text-2xl font-black uppercase tracking-tight italic">
+<h2 id="title"
+class="text-2xl font-black uppercase italic">
 Loading...
 </h2>
 
 <div class="flex gap-3 mt-2 mb-2">
-<span
-id="rating"
+<span id="rating"
 class="text-cyan-300 font-bold text-xs">
 ★ --
 </span>
 
-<span
-id="type-tag"
+<span id="type-tag"
 class="bg-cyan-950 text-cyan-300 px-2 py-1 rounded text-[9px] font-bold uppercase">
 Movie
 </span>
@@ -256,7 +218,6 @@ SELECT SERVER
 <button onclick="updateServer('server6')" id="btn-server6" class="server-btn py-3">Server 6</button>
 
 </div>
-
 </div>
 
 
@@ -288,8 +249,7 @@ class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar">
 OVERVIEW
 </p>
 
-<p
-id="overview"
+<p id="overview"
 class="text-sm text-zinc-300 leading-relaxed">
 </p>
 
@@ -313,13 +273,10 @@ class="flex gap-4 overflow-x-auto no-scrollbar">
 
 
 <script>
-const apiKey=
-"024c5dee9af18585c60e92fa104e3f8c";
+const apiKey="024c5dee9af18585c60e92fa104e3f8c";
 
 const urlParams=
-new URLSearchParams(
-window.location.search
-);
+new URLSearchParams(window.location.search);
 
 const id=urlParams.get("id");
 const type=urlParams.get("type")||"movie";
@@ -329,17 +286,13 @@ let currentEpisode=1;
 let currentServer="server1";
 
 
-function goFullScreen(e){
+/* FULLSCREEN + AUTO LANDSCAPE */
+async function goFullScreen(e){
 
 if(e){
 e.preventDefault();
 e.stopPropagation();
 }
-
-const iframe=
-document.getElementById(
-"player-frame"
-);
 
 const playerArea=
 document.getElementById(
@@ -348,39 +301,58 @@ document.getElementById(
 
 try{
 
-if(iframe.requestFullscreen){
-iframe.requestFullscreen();
+if(playerArea.requestFullscreen){
+await playerArea.requestFullscreen();
 }
-else if(
-iframe.webkitRequestFullscreen
-){
-iframe.webkitRequestFullscreen();
-}
-else if(
-iframe.msRequestFullscreen
-){
-iframe.msRequestFullscreen();
-}
-else if(
-playerArea.requestFullscreen
-){
-playerArea.requestFullscreen();
-}
-else if(
-playerArea.webkitRequestFullscreen
-){
+else if(playerArea.webkitRequestFullscreen){
 playerArea.webkitRequestFullscreen();
 }
-else{
-iframe.contentWindow.focus();
-iframe.click();
+else if(playerArea.msRequestFullscreen){
+playerArea.msRequestFullscreen();
 }
+
+/* force landscape */
+if(
+screen.orientation &&
+screen.orientation.lock
+){
+try{
+await screen.orientation.lock(
+"landscape"
+);
+}catch(err){}
+}
+
+window.scrollTo(0,1);
 
 }catch(err){
 console.log(err);
 }
 
 }
+
+
+/* unlock portrait when exit */
+document.addEventListener(
+"fullscreenchange",
+function(){
+
+if(!document.fullscreenElement){
+
+if(
+screen.orientation &&
+screen.orientation.unlock
+){
+try{
+screen.orientation.unlock();
+}catch(e){}
+}
+
+}
+
+}
+);
+
 
 
 function updateServer(serverKey){
@@ -399,9 +371,7 @@ type==="anime"
 document
 .querySelectorAll(".server-btn")
 .forEach(btn=>
-btn.classList.remove(
-"active"
-)
+btn.classList.remove("active")
 );
 
 document
@@ -439,6 +409,7 @@ playerFrame.src=
 servers[serverKey];
 
 }
+
 
 
 async function init(){
@@ -532,7 +503,8 @@ data.seasons
 s=>s.season_number>0
 )
 .map(
-s=>`<option value="${s.season_number}">
+s=>`
+<option value="${s.season_number}">
 Season ${s.season_number}
 </option>`
 ).join("");
@@ -540,9 +512,7 @@ Season ${s.season_number}
 loadEpisodes(1);
 
 }else{
-
 updateServer("server1");
-
 }
 
 }catch(error){
@@ -556,8 +526,7 @@ async function loadEpisodes(
 seasonNum
 ){
 
-currentSeason=
-seasonNum;
+currentSeason=seasonNum;
 
 const response=
 await fetch(
@@ -567,12 +536,9 @@ await fetch(
 const data=
 await response.json();
 
-const episodeList=
 document.getElementById(
 "episode-list"
-);
-
-episodeList.innerHTML=
+).innerHTML=
 data.episodes.map(ep=>`
 <button
 onclick="setEpisode(${ep.episode_number})"
@@ -586,16 +552,13 @@ setEpisode(1);
 }
 
 
-function setEpisode(
-epNum
-){
+function setEpisode(epNum){
 currentEpisode=epNum;
-updateServer(
-currentServer
-);
+updateServer(currentServer);
 }
 
 init();
+
 </script>
 
 </body>
