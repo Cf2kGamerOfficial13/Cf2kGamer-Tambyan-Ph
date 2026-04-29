@@ -320,25 +320,26 @@ let currentEpisode=1;
 let currentServer="server1";
 
 
-function goFullScreen(){
+function goFullScreen() {
+    const playerArea = document.getElementById("player-area");
 
-const playerArea=
-document.getElementById(
-"player-area"
-);
-
-if(playerArea.requestFullscreen){
-playerArea.requestFullscreen();
-}else if(
-playerArea.webkitRequestFullscreen
-){
-playerArea.webkitRequestFullscreen();
-}else if(
-playerArea.msRequestFullscreen
-){
-playerArea.msRequestFullscreen();
-}
-
+    if (playerArea.requestFullscreen) {
+        playerArea.requestFullscreen().then(function () {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(function(){});
+            }
+        });
+    } else if (playerArea.webkitRequestFullscreen) {
+        playerArea.webkitRequestFullscreen();
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock("landscape").catch(function(){});
+        }
+    } else if (playerArea.msRequestFullscreen) {
+        playerArea.msRequestFullscreen();
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock("landscape").catch(function(){});
+        }
+    }
 }
 
 
