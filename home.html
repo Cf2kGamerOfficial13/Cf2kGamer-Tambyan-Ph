@@ -62,7 +62,11 @@ display:flex;
 overflow-x:auto;
 scroll-snap-type:x mandatory;
 scroll-behavior:smooth;
+-webkit-overflow-scrolling:touch;
+scrollbar-width:none;
+position:relative;
 }
+#hero-banner::-webkit-scrollbar{display:none;}
 
 .banner-slide{
 flex:0 0 100%;
@@ -70,18 +74,50 @@ width:100%;
 height:100%;
 position:relative;
 scroll-snap-align:start;
+transition:transform .6s ease,opacity .6s ease;
+opacity:.86;
+transform:scale(.985);
 }
-
+.banner-slide.active-slide{
+opacity:1;
+transform:scale(1);
+}
 .banner-slide img{
 width:100%;
 height:100%;
 object-fit:cover;
+animation:heroZoom 12s linear infinite alternate;
+}
+@keyframes heroZoom{
+from{transform:scale(1)}
+to{transform:scale(1.08)}
 }
 
 .banner-overlay{
 position:absolute;
 inset:0;
 background:linear-gradient(to top,#020b16 5%,transparent 60%);
+}
+
+#hero-dots{
+position:fixed;
+left:50%;
+bottom:18px;
+transform:translateX(-50%);
+display:flex;
+gap:8px;
+z-index:120;
+}
+.hero-dot{
+width:8px;
+height:8px;
+border-radius:30px;
+background:rgba(255,255,255,.35);
+transition:.35s;
+}
+.hero-dot.active{
+width:24px;
+background:#35cfff;
 }
 
 /* CARDS */
@@ -172,7 +208,7 @@ flex-direction:column;
 <body class="pb-24">
 
     <div id="menu-overlay" class="menu-overlay" onclick="toggleMenu()"></div>
-    
+
     <div id="side-menu" class="p-8 flex flex-col">
         <div class="flex justify-between items-center mb-10">
             <h2 class="font-['Orbitron'] text-xl text-cyan-400 uppercase tracking-widest">Cf2k Menu</h2>
@@ -191,7 +227,7 @@ flex-direction:column;
             <a href="explore.html?type=ph" tabindex="0" class="flex items-center gap-4 hover:text-cyan-400 focus:text-cyan-400">
                 <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png" class="w-6 h-6 invert"> <span>Pinoy Pride</span>
             </a>
-           
+
         </nav>
 
         <div class="mt-auto pt-8 opacity-20 transition-opacity hover:opacity-50">
@@ -225,6 +261,7 @@ flex-direction:column;
     </header>
 
     <section id="hero-banner" class="no-scrollbar snap-x snap-mandatory"></section>
+    <div id="hero-dots"></div>
 
     <section class="mt-8">
         <div class="px-6 mb-4 flex items-center justify-between">
@@ -254,7 +291,7 @@ flex-direction:column;
         </div>
         <div id="search-results" class="flex-1 overflow-y-auto p-6 grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
     </div>
-    
+
     <script>
         const apiKey = '16902847bed95ac4ac7130b3f811f009';
         let activeType = 'movie', activeNetId = 213, activeNetName = 'Netflix';
@@ -305,7 +342,7 @@ flex-direction:column;
                 renderRow(container, `Popular on ${name}`, data.results.slice(0,12), false, activeType, true);
             } catch(e) { container.innerHTML = ''; }
         }
-        
+
 
 
 
@@ -376,9 +413,90 @@ Watch Now
                     renderRow(main, row.t, d.results.slice(0,10), row.r, row.tp, false);
                 } catch(e) {}
             }
-            
+
             // Auto-load First Network
             updateServiceRow(213, 'Netflix', document.querySelector('.chip[data-id="213"]'));
+
+            /* HERO AUTO SWIPE INTEGRATION */
+            let heroIndex = 0;
+            let heroTimer;
+            let heroTouch = 0;
+
+            function updateHeroDots() {
+                document.querySelectorAll('.banner-slide').forEach((s, i) => {
+                    s.classList.toggle('active-slide', i === heroIndex);
+                });
+                document.querySelectorAll('.hero-dot').forEach((d, i) => {
+                    d.classList.toggle('active', i === heroIndex);
+                });
+            }
+
+            function goHero(i) {
+                const banner = document.getElementById('hero-banner');
+                const slides = document.querySelectorAll('.banner-slide');
+                if (!slides.length) return;
+
+                if (i >= slides.length) i = 0;
+                if (i < 0) i = slides.length - 1;
+                heroIndex = i;
+
+                banner.scrollTo({
+                    left: heroIndex * banner.offsetWidth,
+                    behavior: 'smooth'
+                });
+
+                updateHeroDots();
+            }
+
+            function startHeroAuto() {
+                clearInterval(heroTimer);
+                heroTimer = setInterval(() => {
+                    goHero(heroIndex + 1);
+                }, 4000);
+            }
+
+            setTimeout(() => {
+                const slides = document.querySelectorAll('.banner-slide');
+                const dots = document.getElementById('hero-dots');
+
+                if (dots && !dots.innerHTML) {
+                    slides.forEach((_, i) => {
+                        dots.innerHTML += `<div class="hero-dot ${i === 0 ? 'active' : ''}"></div>`;
+                    });
+                }
+
+                updateHeroDots();
+                startHeroAuto();
+
+                const banner = document.getElementById('hero-banner');
+
+                banner.addEventListener('touchstart', e => {
+                    heroTouch = e.touches[0].clientX;
+                    clearInterval(heroTimer);
+                });
+
+                banner.addEventListener('touchend', e => {
+                    let diff = heroTouch - e.changedTouches[0].clientX;
+                    if (diff > 50) goHero(heroIndex + 1);
+                    if (diff < -50) goHero(heroIndex - 1);
+                    startHeroAuto();
+                });
+
+                banner.addEventListener('scroll', () => {
+                    clearTimeout(window.heroSnap);
+                    window.heroSnap = setTimeout(() => {
+                        heroIndex = Math.round(
+                            banner.scrollLeft / banner.offsetWidth
+                        );
+                        updateHeroDots();
+                    }, 80);
+                });
+
+                window.addEventListener('resize', () => {
+                    goHero(heroIndex);
+                });
+
+            }, 1800);
         });
 
         // REMOTE SCROLL HELPER
@@ -392,5 +510,4 @@ Watch Now
         });
     </script>
 </body>
-  </html>
-  
+    </html>
