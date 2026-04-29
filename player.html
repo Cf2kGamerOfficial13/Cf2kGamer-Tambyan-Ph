@@ -26,16 +26,13 @@ radial-gradient(circle at top,#1a5ea5 0%,#0c2448 35%,#020814 100%);
 display:none;
 }
 
-/* top bar */
 .topbar{
 background:rgba(6,24,48,.78);
 backdrop-filter:blur(18px);
 border-bottom:1px solid rgba(120,220,255,.15);
-box-shadow:
-0 8px 25px rgba(0,0,0,.35);
+box-shadow:0 8px 25px rgba(0,0,0,.35);
 }
 
-/* video */
 .video-container{
 position:relative;
 width:100%;
@@ -51,10 +48,8 @@ height:100%;
 border:none;
 }
 
-/* buttons */
 .server-btn{
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 rgba(12,35,70,.8),
 rgba(8,22,42,.95)
@@ -67,22 +62,19 @@ font-family:Orbitron;
 }
 
 .server-btn.active{
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 #1d7fff,
 #43dfff
 );
 color:#fff;
-box-shadow:
-0 0 18px rgba(0,200,255,.25);
+box-shadow:0 0 18px rgba(0,200,255,.25);
 }
 
 .ep-btn{
 background:rgba(10,30,56,.75);
 border:1px solid rgba(120,220,255,.12);
 border-radius:12px;
-transition:.2s;
 font-size:11px;
 font-weight:800;
 color:#8ddfff;
@@ -90,8 +82,7 @@ color:#8ddfff;
 
 .ep-btn.active,
 .ep-btn:active{
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 #1f82ff,
 #4fe4ff
@@ -105,44 +96,19 @@ height:62px;
 border-radius:50%;
 object-fit:cover;
 border:2px solid #67d6ff;
-box-shadow:
-0 0 14px rgba(0,200,255,.2);
+box-shadow:0 0 14px rgba(0,200,255,.2);
 }
 
-.fs-btn{
-background:
-linear-gradient(
-135deg,
-#1d7fff,
-#47ddff
-);
-border:none;
-color:white;
-box-shadow:
-0 0 18px rgba(0,200,255,.2);
-}
-
-.fs-btn:focus{
-transform:scale(1.05);
-}
-
-/* cards */
 .panel{
-background:
-linear-gradient(
+background:linear-gradient(
 180deg,
 rgba(14,38,70,.58),
 rgba(8,18,34,.9)
 );
-
 border:1px solid rgba(120,220,255,.12);
-
 backdrop-filter:blur(14px);
-
 border-radius:22px;
-
-box-shadow:
-0 8px 24px rgba(0,0,0,.18);
+box-shadow:0 8px 24px rgba(0,0,0,.18);
 }
 
 .section-title{
@@ -156,12 +122,20 @@ border:1px solid rgba(120,220,255,.2)!important;
 color:#7ee7ff!important;
 }
 
-/* focus */
-button:focus{
-outline:none;
-box-shadow:
-0 0 18px rgba(0,220,255,.35);
-transform:scale(1.04);
+.float-fs{
+position:absolute;
+top:12px;
+right:12px;
+z-index:20;
+padding:10px 14px;
+font-size:12px;
+font-weight:900;
+border-radius:14px;
+border:none;
+background:rgba(0,20,40,.65);
+backdrop-filter:blur(10px);
+color:#8ef5ff;
+border:1px solid rgba(130,240,255,.25);
 }
 </style>
 </head>
@@ -171,7 +145,7 @@ transform:scale(1.04);
 <div class="topbar flex items-center gap-4 p-4 sticky top-0 z-50">
 
 <button
-onclick="window.location.href='index.html'"
+onclick="window.location.href='home.html'"
 class="text-cyan-300 font-bold text-sm font-['Orbitron']">
 ← BACK
 </button>
@@ -184,23 +158,23 @@ class="text-cyan-200 text-[10px] font-bold uppercase tracking-widest">
 Reload Player
 </button>
 
-<div class="h-4 w-[1px] bg-cyan-900"></div>
-
-<button
-onclick="goFullScreen()"
-class="fs-btn text-[10px] font-bold uppercase tracking-widest px-3 py-2 rounded-xl">
-⛶ Fullscreen
-</button>
-
 </div>
 
 
 <div id="player-area" class="video-container">
+
+<button
+class="float-fs"
+onclick="goFullScreen(event)">
+⛶ Full
+</button>
+
 <iframe
 id="player-frame"
 allowfullscreen
-allow="autoplay">
+allow="autoplay; fullscreen">
 </iframe>
+
 </div>
 
 
@@ -208,21 +182,18 @@ allow="autoplay">
 
 <div class="panel p-5 mb-6">
 
-<h2
-id="title"
-class="text-2xl font-black uppercase tracking-tight italic">
+<h2 id="title"
+class="text-2xl font-black uppercase italic">
 Loading...
 </h2>
 
 <div class="flex gap-3 mt-2 mb-2">
-<span
-id="rating"
+<span id="rating"
 class="text-cyan-300 font-bold text-xs">
 ★ --
 </span>
 
-<span
-id="type-tag"
+<span id="type-tag"
 class="bg-cyan-950 text-cyan-300 px-2 py-1 rounded text-[9px] font-bold uppercase">
 Movie
 </span>
@@ -247,7 +218,6 @@ SELECT SERVER
 <button onclick="updateServer('server6')" id="btn-server6" class="server-btn py-3">Server 6</button>
 
 </div>
-
 </div>
 
 
@@ -279,8 +249,7 @@ class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar">
 OVERVIEW
 </p>
 
-<p
-id="overview"
+<p id="overview"
 class="text-sm text-zinc-300 leading-relaxed">
 </p>
 
@@ -304,13 +273,10 @@ class="flex gap-4 overflow-x-auto no-scrollbar">
 
 
 <script>
-const apiKey=
-"024c5dee9af18585c60e92fa104e3f8c";
+const apiKey="024c5dee9af18585c60e92fa104e3f8c";
 
 const urlParams=
-new URLSearchParams(
-window.location.search
-);
+new URLSearchParams(window.location.search);
 
 const id=urlParams.get("id");
 const type=urlParams.get("type")||"movie";
@@ -320,27 +286,73 @@ let currentEpisode=1;
 let currentServer="server1";
 
 
-function goFullScreen() {
-    const playerArea = document.getElementById("player-area");
+/* FULLSCREEN + AUTO LANDSCAPE */
+async function goFullScreen(e){
 
-    if (playerArea.requestFullscreen) {
-        playerArea.requestFullscreen().then(function () {
-            if (screen.orientation && screen.orientation.lock) {
-                screen.orientation.lock("landscape").catch(function(){});
-            }
-        });
-    } else if (playerArea.webkitRequestFullscreen) {
-        playerArea.webkitRequestFullscreen();
-        if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock("landscape").catch(function(){});
-        }
-    } else if (playerArea.msRequestFullscreen) {
-        playerArea.msRequestFullscreen();
-        if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock("landscape").catch(function(){});
-        }
-    }
+if(e){
+e.preventDefault();
+e.stopPropagation();
 }
+
+const playerArea=
+document.getElementById(
+"player-area"
+);
+
+try{
+
+if(playerArea.requestFullscreen){
+await playerArea.requestFullscreen();
+}
+else if(playerArea.webkitRequestFullscreen){
+playerArea.webkitRequestFullscreen();
+}
+else if(playerArea.msRequestFullscreen){
+playerArea.msRequestFullscreen();
+}
+
+/* force landscape */
+if(
+screen.orientation &&
+screen.orientation.lock
+){
+try{
+await screen.orientation.lock(
+"landscape"
+);
+}catch(err){}
+}
+
+window.scrollTo(0,1);
+
+}catch(err){
+console.log(err);
+}
+
+}
+
+
+/* unlock portrait when exit */
+document.addEventListener(
+"fullscreenchange",
+function(){
+
+if(!document.fullscreenElement){
+
+if(
+screen.orientation &&
+screen.orientation.unlock
+){
+try{
+screen.orientation.unlock();
+}catch(e){}
+}
+
+}
+
+}
+);
+
 
 
 function updateServer(serverKey){
@@ -359,9 +371,7 @@ type==="anime"
 document
 .querySelectorAll(".server-btn")
 .forEach(btn=>
-btn.classList.remove(
-"active"
-)
+btn.classList.remove("active")
 );
 
 document
@@ -399,6 +409,7 @@ playerFrame.src=
 servers[serverKey];
 
 }
+
 
 
 async function init(){
@@ -455,7 +466,6 @@ await creditsResponse.json();
 document.getElementById(
 "cast-list"
 ).innerHTML=
-
 creditsData.cast
 .slice(0,10)
 .map(person=>`
@@ -493,15 +503,16 @@ data.seasons
 s=>s.season_number>0
 )
 .map(
-s=>`<option value="${s.season_number}">Season ${s.season_number}</option>`
+s=>`
+<option value="${s.season_number}">
+Season ${s.season_number}
+</option>`
 ).join("");
 
 loadEpisodes(1);
 
 }else{
-
 updateServer("server1");
-
 }
 
 }catch(error){
@@ -515,8 +526,7 @@ async function loadEpisodes(
 seasonNum
 ){
 
-currentSeason=
-seasonNum;
+currentSeason=seasonNum;
 
 const response=
 await fetch(
@@ -526,12 +536,9 @@ await fetch(
 const data=
 await response.json();
 
-const episodeList=
 document.getElementById(
 "episode-list"
-);
-
-episodeList.innerHTML=
+).innerHTML=
 data.episodes.map(ep=>`
 <button
 onclick="setEpisode(${ep.episode_number})"
@@ -544,16 +551,14 @@ setEpisode(1);
 
 }
 
-function setEpisode(
-epNum
-){
+
+function setEpisode(epNum){
 currentEpisode=epNum;
-updateServer(
-currentServer
-);
+updateServer(currentServer);
 }
 
 init();
+
 </script>
 
 </body>
