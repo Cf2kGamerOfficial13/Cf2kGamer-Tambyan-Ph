@@ -38,14 +38,30 @@ position:relative;
 width:100%;
 aspect-ratio:16/9;
 background:#000;
-border-bottom:1px solid rgba(90,200,255,.25);
-box-shadow:0 10px 30px rgba(0,0,0,.4);
+overflow:hidden;
 }
 
 iframe{
 width:100%;
 height:100%;
 border:none;
+}
+
+.force-landscape{
+position:fixed !important;
+top:0;
+left:0;
+width:100vh !important;
+height:100vw !important;
+transform:rotate(90deg);
+transform-origin:center center;
+z-index:99999;
+background:#000;
+}
+
+.force-landscape iframe{
+width:100%;
+height:100%;
 }
 
 .server-btn{
@@ -57,22 +73,18 @@ rgba(8,22,42,.95)
 border:1px solid rgba(120,220,255,.15);
 border-radius:14px;
 color:#bfefff;
-transition:.25s;
 font-family:Orbitron;
 }
 
 .server-btn.active{
 background:linear-gradient(
-135deg,
-#1d7fff,
-#43dfff
+135deg,#1d7fff,#43dfff
 );
 color:#fff;
-box-shadow:0 0 18px rgba(0,200,255,.25);
 }
 
 .ep-btn{
-background:rgba(10,30,56,.75);
+background:#0d2444;
 border:1px solid rgba(120,220,255,.12);
 border-radius:12px;
 font-size:11px;
@@ -80,23 +92,9 @@ font-weight:800;
 color:#8ddfff;
 }
 
-.ep-btn.active,
 .ep-btn:active{
-background:linear-gradient(
-135deg,
-#1f82ff,
-#4fe4ff
-);
-color:white;
-}
-
-.cast-img{
-width:62px;
-height:62px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid #67d6ff;
-box-shadow:0 0 14px rgba(0,200,255,.2);
+background:#1f82ff;
+color:#fff;
 }
 
 .panel{
@@ -106,9 +104,8 @@ rgba(14,38,70,.58),
 rgba(8,18,34,.9)
 );
 border:1px solid rgba(120,220,255,.12);
-backdrop-filter:blur(14px);
 border-radius:22px;
-box-shadow:0 8px 24px rgba(0,0,0,.18);
+backdrop-filter:blur(14px);
 }
 
 .section-title{
@@ -116,24 +113,25 @@ color:#87eaff;
 letter-spacing:3px;
 }
 
-select{
-background:#0d2444!important;
-border:1px solid rgba(120,220,255,.2)!important;
-color:#7ee7ff!important;
+.cast-img{
+width:62px;
+height:62px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #67d6ff;
 }
 
 .float-fs{
 position:absolute;
 top:12px;
 right:12px;
-z-index:20;
+z-index:50;
 padding:10px 14px;
 font-size:12px;
 font-weight:900;
 border-radius:14px;
 border:none;
 background:rgba(0,20,40,.65);
-backdrop-filter:blur(10px);
 color:#8ef5ff;
 border:1px solid rgba(130,240,255,.25);
 }
@@ -145,7 +143,7 @@ border:1px solid rgba(130,240,255,.25);
 <div class="topbar flex items-center gap-4 p-4 sticky top-0 z-50">
 
 <button
-onclick="window.location.href='index.html'"
+onclick="history.back()"
 class="text-cyan-300 font-bold text-sm font-['Orbitron']">
 ← BACK
 </button>
@@ -154,7 +152,7 @@ class="text-cyan-300 font-bold text-sm font-['Orbitron']">
 
 <button
 onclick="location.reload()"
-class="text-cyan-200 text-[10px] font-bold uppercase tracking-widest">
+class="text-cyan-200 text-[10px] font-bold uppercase">
 Reload Player
 </button>
 
@@ -183,18 +181,17 @@ allow="autoplay; fullscreen">
 <div class="panel p-5 mb-6">
 
 <h2 id="title"
-class="text-2xl font-black uppercase italic">
+class="text-2xl font-black italic">
 Loading...
 </h2>
 
-<div class="flex gap-3 mt-2 mb-2">
-<span id="rating"
-class="text-cyan-300 font-bold text-xs">
+<div class="flex gap-3 mt-2">
+<span id="rating">
 ★ --
 </span>
 
 <span id="type-tag"
-class="bg-cyan-950 text-cyan-300 px-2 py-1 rounded text-[9px] font-bold uppercase">
+class="bg-cyan-950 px-2 py-1 rounded text-[9px]">
 Movie
 </span>
 </div>
@@ -204,79 +201,72 @@ Movie
 
 <div class="panel p-5 mb-6">
 
-<p class="section-title text-[9px] font-bold uppercase mb-3">
+<p class="section-title text-[9px] mb-3">
 SELECT SERVER
 </p>
 
 <div class="grid grid-cols-3 gap-3">
 
-<button onclick="updateServer('server1')" id="btn-server1" class="server-btn py-3 active">Server 1</button>
-<button onclick="updateServer('server2')" id="btn-server2" class="server-btn py-3">Server 2</button>
-<button onclick="updateServer('server3')" id="btn-server3" class="server-btn py-3">Server 3</button>
-<button onclick="updateServer('server4')" id="btn-server4" class="server-btn py-3">Server 4</button>
-<button onclick="updateServer('server5')" id="btn-server5" class="server-btn py-3">Server 5</button>
-<button onclick="updateServer('server6')" id="btn-server6" class="server-btn py-3">Server 6</button>
+<button onclick="updateServer('server1')" id="btn-server1" class="server-btn py-3 active">Server1</button>
+<button onclick="updateServer('server2')" id="btn-server2" class="server-btn py-3">Server2</button>
+<button onclick="updateServer('server3')" id="btn-server3" class="server-btn py-3">Server3</button>
+<button onclick="updateServer('server4')" id="btn-server4" class="server-btn py-3">Server4</button>
+<button onclick="updateServer('server5')" id="btn-server5" class="server-btn py-3">Server5</button>
+<button onclick="updateServer('server6')" id="btn-server6" class="server-btn py-3">Server6</button>
 
 </div>
 </div>
 
 
-<div
-id="series-controls"
+<div id="series-controls"
 class="hidden panel p-5 mb-6">
 
-<p class="section-title text-[9px] font-bold uppercase mb-3">
+<p class="section-title text-[9px] mb-3">
 EPISODES
 </p>
 
 <select
 id="seasonSelect"
 onchange="loadEpisodes(this.value)"
-class="w-full p-3 rounded-xl font-bold mb-4">
+class="w-full p-3 rounded-xl mb-4">
 </select>
 
-<div
-id="episode-list"
-class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar">
+<div id="episode-list"
+class="grid grid-cols-4 gap-2">
 </div>
 
 </div>
 
 
 <div class="panel p-5 mb-6">
-
-<p class="section-title text-[9px] font-bold uppercase mb-3">
+<p class="section-title text-[9px] mb-3">
 OVERVIEW
 </p>
-
-<p id="overview"
-class="text-sm text-zinc-300 leading-relaxed">
-</p>
-
+<p id="overview"></p>
 </div>
 
 
 <div class="panel p-5">
-
-<p class="section-title text-[9px] font-bold uppercase mb-4">
+<p class="section-title text-[9px] mb-4">
 TOP CAST
 </p>
 
-<div
-id="cast-list"
+<div id="cast-list"
 class="flex gap-4 overflow-x-auto no-scrollbar">
 </div>
-
 </div>
 
 </main>
+
 
 
 <script>
 const apiKey="024c5dee9af18585c60e92fa104e3f8c";
 
 const urlParams=
-new URLSearchParams(window.location.search);
+new URLSearchParams(
+window.location.search
+);
 
 const id=urlParams.get("id");
 const type=urlParams.get("type")||"movie";
@@ -286,7 +276,7 @@ let currentEpisode=1;
 let currentServer="server1";
 
 
-/* FULLSCREEN + AUTO LANDSCAPE */
+
 async function goFullScreen(e){
 
 if(e){
@@ -294,24 +284,22 @@ e.preventDefault();
 e.stopPropagation();
 }
 
-const playerArea=
+const player=
 document.getElementById(
 "player-area"
 );
 
 try{
 
-if(playerArea.requestFullscreen){
-await playerArea.requestFullscreen();
+if(player.requestFullscreen){
+await player.requestFullscreen();
 }
-else if(playerArea.webkitRequestFullscreen){
-playerArea.webkitRequestFullscreen();
-}
-else if(playerArea.msRequestFullscreen){
-playerArea.msRequestFullscreen();
+else if(player.webkitRequestFullscreen){
+player.webkitRequestFullscreen();
 }
 
-/* force landscape */
+let locked=false;
+
 if(
 screen.orientation &&
 screen.orientation.lock
@@ -320,7 +308,15 @@ try{
 await screen.orientation.lock(
 "landscape"
 );
+locked=true;
 }catch(err){}
+}
+
+/* fallback force landscape */
+if(!locked){
+player.classList.add(
+"force-landscape"
+);
 }
 
 window.scrollTo(0,1);
@@ -332,12 +328,23 @@ console.log(err);
 }
 
 
-/* unlock portrait when exit */
+
+/* remove rotate on exit */
 document.addEventListener(
 "fullscreenchange",
 function(){
 
-if(!document.fullscreenElement){
+if(
+!document.fullscreenElement
+){
+
+document
+.getElementById(
+"player-area"
+)
+.classList.remove(
+"force-landscape"
+);
 
 if(
 screen.orientation &&
@@ -359,28 +366,22 @@ function updateServer(serverKey){
 
 currentServer=serverKey;
 
-const playerFrame=
-document.getElementById(
-"player-frame"
-);
-
-const mediaType=
-type==="anime"
-?"tv":type;
-
 document
 .querySelectorAll(".server-btn")
-.forEach(btn=>
-btn.classList.remove("active")
+.forEach(
+b=>b.classList.remove("active")
 );
 
 document
 .getElementById(
 "btn-"+serverKey
-)
-.classList.add(
-"active"
-);
+).classList.add("active");
+
+
+const mediaType=
+type==="anime"
+?"tv":type;
+
 
 const servers={
 
@@ -405,7 +406,10 @@ server6:
 `https://multiembed.mov/?video_id=${id}&tmdb=1${mediaType==="tv"?`&s=${currentSeason}&e=${currentEpisode}`:""}`
 };
 
-playerFrame.src=
+document
+.getElementById(
+"player-frame"
+).src=
 servers[serverKey];
 
 }
@@ -414,73 +418,37 @@ servers[serverKey];
 
 async function init(){
 
-if(!id) return;
+if(!id)return;
 
 const mediaType=
 type==="anime"
 ?"tv":type;
 
-try{
-
-const response=
+const r=
 await fetch(
 `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${apiKey}`
 );
 
 const data=
-await response.json();
+await r.json();
 
-document.getElementById(
-"title"
-).textContent=
+title.textContent=
 data.title||data.name;
 
-document.getElementById(
-"overview"
-).textContent=
+overview.textContent=
 data.overview;
 
-document.getElementById(
-"rating"
-).textContent=
-"★ "+
-(
-data.vote_average
-?data.vote_average.toFixed(1)
-:"0.0"
+rating.textContent=
+"★ "+(
+data.vote_average?
+data.vote_average.toFixed(1):
+"0.0"
 );
 
-document.getElementById(
-"type-tag"
-).textContent=type;
+type-tag.textContent=type;
 
+updateServer("server1");
 
-const creditsResponse=
-await fetch(
-`https://api.themoviedb.org/3/${mediaType}/${id}/credits?api_key=${apiKey}`
-);
-
-const creditsData=
-await creditsResponse.json();
-
-document.getElementById(
-"cast-list"
-).innerHTML=
-creditsData.cast
-.slice(0,10)
-.map(person=>`
-<div class="flex-shrink-0 text-center w-16">
-<img class="cast-img mb-2"
-src="${
-person.profile_path
-?"https://image.tmdb.org/t/p/w185"+person.profile_path
-:"https://via.placeholder.com/60"
-}">
-<p class="text-[8px] font-bold truncate text-cyan-300 uppercase">
-${person.name}
-</p>
-</div>
-`).join("");
 
 if(mediaType==="tv"){
 
@@ -492,11 +460,6 @@ document
 "hidden"
 );
 
-const seasonSelect=
-document.getElementById(
-"seasonSelect"
-);
-
 seasonSelect.innerHTML=
 data.seasons
 .filter(
@@ -506,39 +469,31 @@ s=>s.season_number>0
 s=>`
 <option value="${s.season_number}">
 Season ${s.season_number}
-</option>`
+</option>
+`
 ).join("");
 
 loadEpisodes(1);
 
-}else{
-updateServer("server1");
-}
-
-}catch(error){
-console.error(error);
 }
 
 }
 
 
-async function loadEpisodes(
-seasonNum
-){
+
+async function loadEpisodes(seasonNum){
 
 currentSeason=seasonNum;
 
-const response=
+const r=
 await fetch(
 `https://api.themoviedb.org/3/tv/${id}/season/${seasonNum}?api_key=${apiKey}`
 );
 
 const data=
-await response.json();
+await r.json();
 
-document.getElementById(
-"episode-list"
-).innerHTML=
+episode-list.innerHTML=
 data.episodes.map(ep=>`
 <button
 onclick="setEpisode(${ep.episode_number})"
@@ -552,8 +507,9 @@ setEpisode(1);
 }
 
 
-function setEpisode(epNum){
-currentEpisode=epNum;
+
+function setEpisode(ep){
+currentEpisode=ep;
 updateServer(currentServer);
 }
 
@@ -562,4 +518,4 @@ init();
 </script>
 
 </body>
-</html>
+  </html>
