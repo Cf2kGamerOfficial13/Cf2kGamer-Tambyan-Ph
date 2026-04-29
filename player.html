@@ -48,24 +48,6 @@ height:100%;
 border:none;
 }
 
-/* added only for landscape fallback */
-.force-landscape{
-position:fixed !important;
-top:0;
-left:0;
-width:100vh !important;
-height:100vw !important;
-transform:rotate(90deg);
-transform-origin:center center;
-z-index:99999;
-background:#000;
-}
-
-.force-landscape iframe{
-width:100%;
-height:100%;
-}
-
 .server-btn{
 background:linear-gradient(
 135deg,
@@ -126,8 +108,16 @@ background:linear-gradient(
 );
 border:none;
 color:white;
+box-shadow:0 0 18px rgba(0,200,255,.2);
 min-height:44px;
 min-width:125px;
+cursor:pointer;
+touch-action:manipulation;
+-webkit-tap-highlight-color:transparent;
+}
+
+.fs-btn:active{
+transform:scale(.96);
 }
 
 .panel{
@@ -139,6 +129,7 @@ rgba(8,18,34,.9)
 border:1px solid rgba(120,220,255,.12);
 backdrop-filter:blur(14px);
 border-radius:22px;
+box-shadow:0 8px 24px rgba(0,0,0,.18);
 }
 
 .section-title{
@@ -152,6 +143,11 @@ border:1px solid rgba(120,220,255,.2)!important;
 color:#7ee7ff!important;
 }
 
+button:focus{
+outline:none;
+box-shadow:0 0 18px rgba(0,220,255,.35);
+}
+
 .float-fs{
 position:absolute;
 top:12px;
@@ -163,6 +159,7 @@ font-weight:900;
 border-radius:14px;
 border:none;
 background:rgba(0,20,40,.65);
+backdrop-filter:blur(10px);
 color:#8ef5ff;
 border:1px solid rgba(130,240,255,.25);
 }
@@ -185,6 +182,15 @@ class="text-cyan-300 font-bold text-sm font-['Orbitron']">
 onclick="location.reload()"
 class="text-cyan-200 text-[10px] font-bold uppercase tracking-widest">
 Reload Player
+</button>
+
+<div class="h-4 w-[1px] bg-cyan-900"></div>
+
+<button
+onclick="goFullScreen(event)"
+type="button"
+class="fs-btn text-[10px] font-bold uppercase tracking-widest px-4 py-3 rounded-xl">
+⛶ FULLSCREEN
 </button>
 
 </div>
@@ -210,53 +216,66 @@ allow="autoplay; fullscreen">
 <main class="p-5">
 
 <div class="panel p-5 mb-6">
-<h2 id="title"
-class="text-2xl font-black uppercase italic">
+
+<h2
+id="title"
+class="text-2xl font-black uppercase tracking-tight italic">
 Loading...
 </h2>
 
 <div class="flex gap-3 mt-2 mb-2">
-<span id="rating">★ --</span>
+<span
+id="rating"
+class="text-cyan-300 font-bold text-xs">
+★ --
+</span>
 
-<span id="type-tag"
-class="bg-cyan-950 px-2 py-1 rounded text-[9px]">
+<span
+id="type-tag"
+class="bg-cyan-950 text-cyan-300 px-2 py-1 rounded text-[9px] font-bold uppercase">
 Movie
 </span>
 </div>
+
 </div>
 
 
 <div class="panel p-5 mb-6">
 
-<p class="section-title text-[9px] mb-3">
+<p class="section-title text-[9px] font-bold uppercase mb-3">
 SELECT SERVER
 </p>
 
 <div class="grid grid-cols-3 gap-3">
+
 <button onclick="updateServer('server1')" id="btn-server1" class="server-btn py-3 active">Server 1</button>
 <button onclick="updateServer('server2')" id="btn-server2" class="server-btn py-3">Server 2</button>
 <button onclick="updateServer('server3')" id="btn-server3" class="server-btn py-3">Server 3</button>
 <button onclick="updateServer('server4')" id="btn-server4" class="server-btn py-3">Server 4</button>
 <button onclick="updateServer('server5')" id="btn-server5" class="server-btn py-3">Server 5</button>
 <button onclick="updateServer('server6')" id="btn-server6" class="server-btn py-3">Server 6</button>
-</div>
 
 </div>
 
+</div>
 
-<div id="series-controls"
+
+<div
+id="series-controls"
 class="hidden panel p-5 mb-6">
 
-<p class="section-title text-[9px] mb-3">
+<p class="section-title text-[9px] font-bold uppercase mb-3">
 EPISODES
 </p>
 
-<select id="seasonSelect"
+<select
+id="seasonSelect"
 onchange="loadEpisodes(this.value)"
-class="w-full p-3 rounded-xl mb-4">
+class="w-full p-3 rounded-xl font-bold mb-4">
 </select>
 
-<div id="episode-list"
+<div
+id="episode-list"
 class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar">
 </div>
 
@@ -264,20 +283,30 @@ class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar">
 
 
 <div class="panel p-5 mb-6">
-<p class="section-title text-[9px] mb-3">
+
+<p class="section-title text-[9px] font-bold uppercase mb-3">
 OVERVIEW
 </p>
-<p id="overview"></p>
+
+<p
+id="overview"
+class="text-sm text-zinc-300 leading-relaxed">
+</p>
+
 </div>
 
 
 <div class="panel p-5">
-<p class="section-title text-[9px] mb-4">
+
+<p class="section-title text-[9px] font-bold uppercase mb-4">
 TOP CAST
 </p>
-<div id="cast-list"
+
+<div
+id="cast-list"
 class="flex gap-4 overflow-x-auto no-scrollbar">
 </div>
+
 </div>
 
 </main>
@@ -300,8 +329,7 @@ let currentEpisode=1;
 let currentServer="server1";
 
 
-/* only fullscreen modified */
-async function goFullScreen(e){
+function goFullScreen(e){
 
 if(e){
 e.preventDefault();
@@ -321,7 +349,7 @@ document.getElementById(
 try{
 
 if(iframe.requestFullscreen){
-await iframe.requestFullscreen();
+iframe.requestFullscreen();
 }
 else if(
 iframe.webkitRequestFullscreen
@@ -336,33 +364,16 @@ iframe.msRequestFullscreen();
 else if(
 playerArea.requestFullscreen
 ){
-await playerArea.requestFullscreen();
+playerArea.requestFullscreen();
 }
 else if(
 playerArea.webkitRequestFullscreen
 ){
 playerArea.webkitRequestFullscreen();
 }
-
-let locked=false;
-
-if(
-screen.orientation &&
-screen.orientation.lock
-){
-try{
-await screen.orientation.lock(
-"landscape"
-);
-locked=true;
-}catch(err){}
-}
-
-/* fallback rotate */
-if(!locked){
-playerArea.classList.add(
-"force-landscape"
-);
+else{
+iframe.contentWindow.focus();
+iframe.click();
 }
 
 }catch(err){
@@ -370,39 +381,6 @@ console.log(err);
 }
 
 }
-
-
-/* remove rotate on exit */
-document.addEventListener(
-"fullscreenchange",
-function(){
-
-if(
-!document.fullscreenElement
-){
-
-document
-.getElementById(
-"player-area"
-)
-.classList.remove(
-"force-landscape"
-);
-
-if(
-screen.orientation &&
-screen.orientation.unlock
-){
-try{
-screen.orientation.unlock();
-}catch(e){}
-}
-
-}
-
-}
-);
-
 
 
 function updateServer(serverKey){
@@ -421,13 +399,16 @@ type==="anime"
 document
 .querySelectorAll(".server-btn")
 .forEach(btn=>
-btn.classList.remove("active")
+btn.classList.remove(
+"active"
+)
 );
 
 document
 .getElementById(
 "btn-"+serverKey
-).classList.add(
+)
+.classList.add(
 "active"
 );
 
@@ -462,7 +443,7 @@ servers[serverKey];
 
 async function init(){
 
-if(!id)return;
+if(!id) return;
 
 const mediaType=
 type==="anime"
@@ -478,21 +459,29 @@ await fetch(
 const data=
 await response.json();
 
-title.textContent=
+document.getElementById(
+"title"
+).textContent=
 data.title||data.name;
 
-overview.textContent=
+document.getElementById(
+"overview"
+).textContent=
 data.overview;
 
-rating.textContent=
+document.getElementById(
+"rating"
+).textContent=
 "★ "+
 (
-data.vote_average?
-data.vote_average.toFixed(1):
-"0.0"
+data.vote_average
+?data.vote_average.toFixed(1)
+:"0.0"
 );
 
-type-tag.textContent=type;
+document.getElementById(
+"type-tag"
+).textContent=type;
 
 
 const creditsResponse=
@@ -503,14 +492,19 @@ await fetch(
 const creditsData=
 await creditsResponse.json();
 
-cast-list.innerHTML=
-creditsData.cast.slice(0,10)
+document.getElementById(
+"cast-list"
+).innerHTML=
+creditsData.cast
+.slice(0,10)
 .map(person=>`
 <div class="flex-shrink-0 text-center w-16">
 <img class="cast-img mb-2"
-src="${person.profile_path?
-'https://image.tmdb.org/t/p/w185'+person.profile_path:
-'https://via.placeholder.com/60'}">
+src="${
+person.profile_path
+?"https://image.tmdb.org/t/p/w185"+person.profile_path
+:"https://via.placeholder.com/60"
+}">
 <p class="text-[8px] font-bold truncate text-cyan-300 uppercase">
 ${person.name}
 </p>
@@ -519,35 +513,51 @@ ${person.name}
 
 if(mediaType==="tv"){
 
-document.getElementById(
+document
+.getElementById(
 "series-controls"
-).classList.remove("hidden");
+)
+.classList.remove(
+"hidden"
+);
+
+const seasonSelect=
+document.getElementById(
+"seasonSelect"
+);
 
 seasonSelect.innerHTML=
 data.seasons
-.filter(s=>s.season_number>0)
-.map(s=>`
-<option value="${s.season_number}">
+.filter(
+s=>s.season_number>0
+)
+.map(
+s=>`<option value="${s.season_number}">
 Season ${s.season_number}
-</option>
-`).join("");
+</option>`
+).join("");
 
 loadEpisodes(1);
 
 }else{
+
 updateServer("server1");
-}
-
-}catch(e){
-console.log(e);
-}
 
 }
 
+}catch(error){
+console.error(error);
+}
 
-async function loadEpisodes(seasonNum){
+}
 
-currentSeason=seasonNum;
+
+async function loadEpisodes(
+seasonNum
+){
+
+currentSeason=
+seasonNum;
 
 const response=
 await fetch(
@@ -557,7 +567,12 @@ await fetch(
 const data=
 await response.json();
 
-episode-list.innerHTML=
+const episodeList=
+document.getElementById(
+"episode-list"
+);
+
+episodeList.innerHTML=
 data.episodes.map(ep=>`
 <button
 onclick="setEpisode(${ep.episode_number})"
@@ -570,9 +585,14 @@ setEpisode(1);
 
 }
 
-function setEpisode(epNum){
+
+function setEpisode(
+epNum
+){
 currentEpisode=epNum;
-updateServer(currentServer);
+updateServer(
+currentServer
+);
 }
 
 init();
