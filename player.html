@@ -287,72 +287,47 @@ let currentServer="server1";
 
 
 /* FULLSCREEN + AUTO LANDSCAPE */
-async function goFullScreen(e){
+async function goFullScreen(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
-if(e){
-e.preventDefault();
-e.stopPropagation();
+  const playerArea = document.getElementById("player-area");
+
+  try {
+    if (playerArea.requestFullscreen) {
+      await playerArea.requestFullscreen();
+    } else if (playerArea.webkitRequestFullscreen) {
+      playerArea.webkitRequestFullscreen();
+    } else if (playerArea.msRequestFullscreen) {
+      playerArea.msRequestFullscreen();
+    }
+
+    // Try lock landscape after fullscreen
+    if (screen.orientation && screen.orientation.lock) {
+      try {
+        await screen.orientation.lock("landscape");
+      } catch (err) {
+        console.log("Orientation lock failed:", err);
+      }
+    }
+
+    window.scrollTo(0, 1);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-const playerArea=
-document.getElementById(
-"player-area"
-);
-
-try{
-
-if(playerArea.requestFullscreen){
-await playerArea.requestFullscreen();
-}
-else if(playerArea.webkitRequestFullscreen){
-playerArea.webkitRequestFullscreen();
-}
-else if(playerArea.msRequestFullscreen){
-playerArea.msRequestFullscreen();
-}
-
-/* force landscape */
-if(
-screen.orientation &&
-screen.orientation.lock
-){
-try{
-await screen.orientation.lock(
-"landscape"
-);
-}catch(err){}
-}
-
-window.scrollTo(0,1);
-
-}catch(err){
-console.log(err);
-}
-
-}
-
-
-/* unlock portrait when exit */
-document.addEventListener(
-"fullscreenchange",
-function(){
-
-if(!document.fullscreenElement){
-
-if(
-screen.orientation &&
-screen.orientation.unlock
-){
-try{
-screen.orientation.unlock();
-}catch(e){}
-}
-
-}
-
-}
-);
-
+document.addEventListener("fullscreenchange", function () {
+  if (!document.fullscreenElement) {
+    if (screen.orientation && screen.orientation.unlock) {
+      try {
+        screen.orientation.unlock();
+      } catch (e) {}
+    }
+  }
+});
 
 
 function updateServer(serverKey){
