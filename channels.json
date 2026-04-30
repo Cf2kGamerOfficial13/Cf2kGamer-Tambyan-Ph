@@ -40,7 +40,7 @@
     "active": "Live",
     "id": 2,
     "title": "TV5 HD",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/TV5_%28Philippines%29_logo.svg/2048px-TV5_%28Philippines%29_logo.svg.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4f/TV5_HD_Logo.png",
     "file": "https://qp-pldt-live-bpk-02-prod.akamaized.net/bpk-tv/tv5_hd/default1/index.mpd",
     "type": "dash",
     "drm": {
