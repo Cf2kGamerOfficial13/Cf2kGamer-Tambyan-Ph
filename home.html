@@ -246,9 +246,8 @@ flex-direction:column;
     <header class="sticky top-0 z-[100] p-4 bg-black/90 backdrop-blur-md border-b border-white/5">
         <div class="flex justify-between items-center px-2">
             <div class="flex items-center gap-4">
-                <button tabindex="0" onclick="toggleMenu()" class="text-2xl focus:text-cyan-400">☰</button>
-                <h1 class="font-['Orbitron'] text-xl text-cyan-400 tracking-tighter uppercase">CF2KGAMER TAMBAYAN PH</h1>
-            </div>
+    <h1 class="font-['Orbitron'] text-xl text-cyan-400 tracking-tighter uppercase">CF2KGAMER TAMBAYAN PH</h1>
+</div>
             <div class="flex gap-4 items-center">
                 <button tabindex="0" onclick="toggleSearch()" class="focus:scale-110">
                     <img src="https://i.postimg.cc/DzgtGPk7/search-interface-symbol.png" class="w-5 h-5 invert">
@@ -510,4 +509,32 @@ Watch Now
         });
     </script>
 </body>
+<!-- BOTTOM HORIZONTAL TABS -->
+<div class="fixed bottom-0 left-0 w-full h-20 bg-black/95 backdrop-blur-md border-t border-cyan-400/10 z-[999] flex justify-around items-center">
+
+    <a href="explore.html?type=movie"
+       class="flex flex-col items-center text-cyan-400 text-[10px] font-bold">
+        <img src="https://i.postimg.cc/SNPQ2q74/film.png" class="w-5 h-5 invert mb-1">
+        Movies
+    </a>
+
+    <a href="explore.html?type=tv"
+       class="flex flex-col items-center text-zinc-400 text-[10px] font-bold hover:text-cyan-400">
+        <img src="https://i.postimg.cc/TPVT4b8R/3283202.png" class="w-5 h-5 invert mb-1">
+        TV Series
+    </a>
+
+    <a href="explore.html?type=kids"
+       class="flex flex-col items-center text-zinc-400 text-[10px] font-bold hover:text-cyan-400">
+        <img src="https://i.postimg.cc/mryGwGMP/baby-boy.png" class="w-5 h-5 invert mb-1">
+        Kids
+    </a>
+
+    <a href="explore.html?type=ph"
+       class="flex flex-col items-center text-zinc-400 text-[10px] font-bold hover:text-cyan-400">
+        <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png" class="w-5 h-5 invert mb-1">
+        Pilipino
+    </a>
+
+</div>
     </html>

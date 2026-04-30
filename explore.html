@@ -211,6 +211,33 @@ animation:spin 1s linear infinite;
 0%{transform:rotate(0deg)}
 100%{transform:rotate(360deg)}
 }
+
+.tab-item{
+color:#71717a;
+transition:all .25s ease;
+position:relative;
+}
+
+.tab-icon{
+filter:invert(1);
+transition:all .25s ease;
+}
+
+/* ACTIVE */
+.tab-item.active{
+color:#35cfff;
+transform:translateY(-4px);
+}
+
+.tab-item.active .tab-icon{
+filter:invert(72%) sepia(64%) saturate(500%) hue-rotate(150deg);
+transform:scale(1.2);
+}
+
+/* CLICK ANIMATION */
+.tab-item:active{
+transform:scale(0.9);
+}
 </style>
 </head>
 
@@ -291,13 +318,7 @@ class="w-5 h-5 invert">
 
 <div class="flex items-center justify-between">
 
-<div class="flex items-center gap-4">
-<button
-tabindex="0"
-onclick="toggleMenu()"
-class="text-2xl text-white">
-☰
-</button>
+
 
 <h1 id="explore-title"
 class="font-['Orbitron'] text-lg uppercase">
@@ -687,6 +708,47 @@ block:"center"
 window.onload=
 setHighlight;
 </script>
+<script>
+const tabs = document.querySelectorAll('.tab-item');
 
+tabs.forEach(tab => {
+    if(window.location.href.includes(tab.getAttribute('href'))){
+        tab.classList.add('active');
+    }
+
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+    });
+});
+</script>
 </body>
+<div class="fixed bottom-0 left-0 w-full h-20 bg-black/95 backdrop-blur-md border-t border-cyan-400/10 z-[999] flex justify-around items-center font-['Orbitron']">
+
+    <a href="index.html" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+        <img src="https://i.postimg.cc/L8WxLrmz/588a6758d06f6719692a2d22.png" class="w-5 h-5 mb-1 tab-icon">
+        Home
+    </a>
+
+    <a href="explore.html?type=movie" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+        <img src="https://i.postimg.cc/SNPQ2q74/film.png" class="w-5 h-5 mb-1 tab-icon">
+        Movies
+    </a>
+
+    <a href="explore.html?type=tv" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+        <img src="https://i.postimg.cc/TPVT4b8R/3283202.png" class="w-5 h-5 mb-1 tab-icon">
+        TV Series
+    </a>
+
+    <a href="explore.html?type=kids" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+        <img src="https://i.postimg.cc/mryGwGMP/baby-boy.png" class="w-5 h-5 mb-1 tab-icon">
+        Kids
+    </a>
+
+    <a href="explore.html?type=ph" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+        <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png" class="w-5 h-5 mb-1 tab-icon">
+        Pilipino
+    </a>
+
+</div>
 </html>
