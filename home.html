@@ -1,6 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+(function () {
+    const host = location.hostname;
+
+    // block popups
+    window.open = function () { return null; };
+
+    // allow only same-domain redirects
+    const allow = (url) => {
+        try {
+            const u = new URL(url, location.href);
+            return u.hostname === host;
+        } catch {
+            return false;
+        }
+    };
+
+    const origAssign = window.location.assign.bind(window.location);
+    const origReplace = window.location.replace.bind(window.location);
+
+    window.location.assign = function (url) {
+        if (allow(url)) origAssign(url);
+    };
+
+    window.location.replace = function (url) {
+        if (allow(url)) origReplace(url);
+    };
+
+    // iframe hijack protection
+    try {
+        if (window.top !== window.self) {
+            window.top.location = window.self.location;
+        }
+    } catch (e) {}
+
+    // remove injected ads (iframe + script)
+    setInterval(() => {
+        document.querySelectorAll("iframe").forEach(f => {
+            if (!f.src.includes(host)) f.remove();
+        });
+
+        document.querySelectorAll("script").forEach(s => {
+            if (s.src && 
+               !s.src.includes(host) && 
+               !s.src.includes("tmdb") && 
+               !s.src.includes("cdn.jsdelivr")) {
+                s.remove();
+            }
+        });
+    }, 1500);
+
+    // block external link traps
+    document.addEventListener("click", function (e) {
+        const a = e.target.closest("a");
+        if (!a) return;
+
+        if (!a.href.includes(host)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+
+})();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <meta charset="UTF-8">
