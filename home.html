@@ -1,73 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-(function () {
-    const host = location.hostname;
-
-    // block popups
-    window.open = function () { return null; };
-
-    // allow only same-domain redirects
-    const allow = (url) => {
-        try {
-            const u = new URL(url, location.href);
-            return u.hostname === host;
-        } catch {
-            return false;
-        }
-    };
-
-    const origAssign = window.location.assign.bind(window.location);
-    const origReplace = window.location.replace.bind(window.location);
-
-    window.location.assign = function (url) {
-        if (allow(url)) origAssign(url);
-    };
-
-    window.location.replace = function (url) {
-        if (allow(url)) origReplace(url);
-    };
-
-    // iframe hijack protection
-    try {
-        if (window.top !== window.self) {
-            window.top.location = window.self.location;
-        }
-    } catch (e) {}
-
-    // remove injected ads (iframe + script)
-    setInterval(() => {
-        document.querySelectorAll("iframe").forEach(f => {
-            if (!f.src.includes(host)) f.remove();
-        });
-
-        document.querySelectorAll("script").forEach(s => {
-            if (s.src && 
-               !s.src.includes(host) && 
-               !s.src.includes("tmdb") && 
-               !s.src.includes("cdn.jsdelivr")) {
-                s.remove();
-            }
-        });
-    }, 1500);
-
-    // block external link traps
-    document.addEventListener("click", function (e) {
-        const a = e.target.closest("a");
-        if (!a) return;
-
-        if (!a.href.includes(host)) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-    }, true);
-
-})();
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
+<script>
+const SB_URL="https://jyhelvryhskzerkkljlw.supabase.co";
+const SB_KEY="sb_publishable_or55AZZztXwJ7IZ14NeZeA_jEqz5TxO";
+const _sb=supabase.createClient(SB_URL,SB_KEY);
+
+async function checkAccess(){
+    const session = localStorage.getItem('king_session');
+
+    if(!session){
+        window.location.href="index.html";
+        return;
+    }
+
+    const { data, error } = await _sb
+        .from('users')
+        .select('status,is_banned')
+        .eq('username', session)
+        .single();
+
+    if(error || !data){
+        localStorage.removeItem('king_session');
+        window.location.href="index.html";
+        return;
+    }
+
+    if(data.is_banned === true || data.is_banned === 1 || data.is_banned === "true"){
+        localStorage.removeItem('king_session');
+        alert("Your account is BANNED!");
+        window.location.href="index.html";
+        return;
+    }
+
+    if(data.status === 'pending'){
+        localStorage.removeItem('king_session');
+        alert("Account still pending!");
+        window.location.href="index.html";
+        return;
+    }
+}
+
+checkAccess();
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="security.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5985177255920045"
+     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CF2KGAMER TAMBAYAN PH| PREMIUM HOME</title>
