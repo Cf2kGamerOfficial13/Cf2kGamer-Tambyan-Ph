@@ -7,53 +7,81 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+
     <style>
-        body { background:#000;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;overflow:hidden }
-        .glass { background:rgba(10,10,10,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05) }
-        input:focus,button:focus {
-            outline:none!important;
-            border-color:#eab308!important;
-            background:#1a1a1a!important;
-            box-shadow:0 0 20px rgba(234,179,8,.4);
-            transform:scale(1.03);
-            transition:.2s ease-in-out
+        body {
+            background: radial-gradient(circle at top, #0b1f3a, #020617 70%);
+            color: #e0f2fe;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
         }
-        button:focus { background:#eab308!important;color:#000!important }
+
+        .glass {
+            background: rgba(10, 25, 50, 0.65);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 0 60px rgba(56,189,248,0.15);
+        }
+
+        input:focus, button:focus {
+            outline: none !important;
+            border-color: #38bdf8 !important;
+            background: #0f172a !important;
+            box-shadow: 0 0 20px rgba(56,189,248,.6);
+            transform: scale(1.03);
+            transition: .2s ease-in-out;
+        }
+
+        button:focus {
+            background: #38bdf8 !important;
+            color: #020617 !important;
+        }
     </style>
 </head>
+
 <body class="flex items-center justify-center min-h-screen p-6">
 
-<div class="w-full max-w-sm p-10 glass rounded-[3rem] shadow-2xl border border-zinc-900">
+<div class="w-full max-w-sm p-10 glass rounded-[3rem] shadow-2xl">
+
     <center>
-        <h1 class="font-['Orbitron'] text-4xl text-yellow-500 mb-2 italic tracking-tighter">CF2KGAMER TAMBAYAN PH</h1>
-        <p class="text-[10px] tracking-[5px] text-zinc-500 uppercase mb-10 font-bold">Premium Access Portal</p>
+        <h1 class="font-['Orbitron'] text-4xl text-sky-400 mb-2 italic tracking-tighter">
+            CF2KGAMER TAMBAYAN PH
+        </h1>
+        <p class="text-[10px] tracking-[5px] text-sky-900 uppercase mb-10 font-bold">
+            Premium Access Portal
+        </p>
     </center>
 
     <div class="space-y-5">
+
         <div id="status-box" class="hidden p-4 rounded-2xl border text-center">
             <p id="status-text" class="text-[10px] font-black uppercase tracking-widest"></p>
         </div>
 
         <input type="text" id="u" placeholder="Username"
-            class="w-full bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 text-sm">
+            class="w-full bg-blue-950/40 p-5 rounded-2xl border border-blue-900 text-sm text-sky-100">
 
         <input type="password" id="p" placeholder="Password"
-            class="w-full bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 text-sm">
+            class="w-full bg-blue-950/40 p-5 rounded-2xl border border-blue-900 text-sm text-sky-100">
 
         <div class="pt-4 space-y-4">
+
             <button onclick="auth('login')"
-                class="w-full bg-yellow-500 py-5 rounded-2xl text-black font-black uppercase text-xs tracking-widest">
+                class="w-full bg-sky-400 py-5 rounded-2xl text-blue-950 font-black uppercase text-xs tracking-widest hover:bg-sky-300 transition">
                 Login Access
             </button>
 
             <button onclick="auth('reg')"
-                class="w-full bg-zinc-900 py-4 rounded-2xl text-white font-bold text-[10px] uppercase tracking-widest border border-zinc-800">
+                class="w-full bg-blue-950 py-4 rounded-2xl text-sky-200 font-bold text-[10px] uppercase tracking-widest border border-blue-900 hover:bg-blue-900 transition">
                 Create Account
             </button>
+
         </div>
     </div>
 
-    <p class="text-center text-[8px] text-zinc-700 mt-8 uppercase tracking-widest">Navigate with D-Pad & Enter</p>
+    <p class="text-center text-[8px] text-blue-900 mt-8 uppercase tracking-widest">
+        Navigate with D-Pad & Enter
+    </p>
 </div>
 
 <script>
@@ -64,7 +92,9 @@ const _sb=supabase.createClient(SB_URL,SB_KEY);
 function setStatus(msg,type){
     const box=document.getElementById('status-box');
     const txt=document.getElementById('status-text');
-    box.className=`p-4 rounded-2xl border text-center ${type==='error'?'bg-red-500/10 border-red-500/30 text-red-500':'bg-yellow-500/10 border-yellow-500/30 text-yellow-500'}`;
+    box.className=`p-4 rounded-2xl border text-center ${type==='error'
+        ?'bg-red-500/10 border-red-500/30 text-red-400'
+        :'bg-sky-400/10 border-sky-400/30 text-sky-400'}`;
     txt.innerText=msg;
     box.classList.remove('hidden');
 }
