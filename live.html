@@ -91,6 +91,7 @@ position:relative;
 width:100%;
 aspect-ratio:16/9;
 background:#000;
+overflow:hidden;
 }
 
 #video{
@@ -109,6 +110,81 @@ border-radius:14px;
 background:rgba(8,35,70,.85);
 font-size:11px;
 font-family:Orbitron;
+z-index:3;
+}
+
+.custom-controls{
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+padding:12px;
+background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
+display:flex;
+align-items:center;
+gap:10px;
+opacity:0;
+transition:.3s;
+z-index:2;
+}
+
+.video-box:hover .custom-controls{
+opacity:1;
+}
+
+.ctrl-btn{
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.2);
+padding:8px 10px;
+border-radius:10px;
+font-size:12px;
+cursor:pointer;
+color:#fff;
+}
+
+.progress{
+flex:1;
+height:6px;
+background:rgba(255,255,255,.2);
+border-radius:10px;
+overflow:hidden;
+cursor:pointer;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:#66c8ff;
+}
+
+.time{
+font-size:10px;
+font-family:Orbitron;
+}
+
+.side-gesture{
+position:absolute;
+top:0;
+width:50%;
+height:100%;
+z-index:1;
+}
+
+#left-gesture{left:0;}
+#right-gesture{right:0;}
+
+.overlay-indicator{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:rgba(0,0,0,.6);
+padding:10px 16px;
+border-radius:12px;
+font-family:Orbitron;
+font-size:12px;
+display:none;
+z-index:4;
 }
 
 .sidebar{
@@ -209,10 +285,33 @@ color:#7fe3ff;
 
 <main class="main-layout">
 
-<section class="video-box">
+<section class="video-box" id="video-container">
+
 <div id="status-msg">LOADING...</div>
 
-<video id="video" controls autoplay playsinline></video>
+<div class="overlay-indicator" id="indicator"></div>
+
+<div id="left-gesture" class="side-gesture"></div>
+<div id="right-gesture" class="side-gesture"></div>
+
+<video id="video" playsinline></video>
+
+<div class="custom-controls">
+
+<button class="ctrl-btn" onclick="togglePlay()">▶</button>
+
+<div class="progress" onclick="seek(event)">
+<div class="progress-bar" id="progress-bar"></div>
+</div>
+
+<div class="time" id="time-display">0:00</div>
+
+<button class="ctrl-btn" onclick="toggleMute()">🔊</button>
+
+<button class="ctrl-btn" onclick="toggleFullscreen()">⛶</button>
+
+</div>
+
 </section>
 
 <aside class="sidebar">
@@ -233,14 +332,12 @@ let channels = [];
 
 const videoElement = document.getElementById("video");
 const statusMsg = document.getElementById("status-msg");
+const indicator = document.getElementById("indicator");
 
 let hlsPlayer = null;
 let shakaPlayer = null;
 
-/* YOUR JSON */
-const CHANNELS_URL =
-"https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.json";
-
+const CHANNELS_URL = "https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.json";
 
 async function loadChannels(){
 try{
@@ -266,7 +363,6 @@ return false;
 }
 }
 
-
 async function initApp(){
 
 shaka.polyfill.installAll();
@@ -281,8 +377,6 @@ let loaded = await loadChannels();
 
 if(loaded){
 renderChannels();
-
-/* AUTO PLAY FIRST (NO ID, PURE OBJECT) */
 if(channels.length){
 setTimeout(()=>{
 const first = document.querySelector(".channel-item");
@@ -291,7 +385,6 @@ if(first) first.click();
 }
 }
 }
-
 
 async function switchChannel(ch, element){
 
@@ -305,7 +398,6 @@ document.getElementById("now-playing").innerText = ch.title;
 statusMsg.style.display="block";
 statusMsg.innerText="CONNECTING...";
 
-/* RESET PLAYERS */
 if(hlsPlayer){
 hlsPlayer.destroy();
 hlsPlayer = null;
@@ -354,7 +446,6 @@ statusMsg.innerText="CHANNEL OFFLINE";
 }
 }
 
-
 function renderChannels(){
 
 const container = document.getElementById("channel-list-container");
@@ -383,7 +474,6 @@ container.appendChild(item);
 });
 }
 
-
 function filterChannels(){
 
 let val = document.getElementById("channel-search").value.toLowerCase();
@@ -396,6 +486,94 @@ item.style.display = t.includes(val) ? "flex" : "none";
 
 });
 }
+
+function togglePlay(){
+if(videoElement.paused){
+videoElement.play();
+}else{
+videoElement.pause();
+}
+}
+
+function toggleMute(){
+videoElement.muted = !videoElement.muted;
+}
+
+function toggleFullscreen(){
+const container = document.getElementById("video-container");
+
+if(!document.fullscreenElement){
+container.requestFullscreen();
+if(screen.orientation && screen.orientation.lock){
+screen.orientation.lock("landscape").catch(()=>{});
+}
+}else{
+document.exitFullscreen();
+if(screen.orientation && screen.orientation.unlock){
+screen.orientation.unlock();
+}
+}
+}
+
+const progressBar = document.getElementById("progress-bar");
+const timeDisplay = document.getElementById("time-display");
+
+videoElement.addEventListener("timeupdate", ()=>{
+const percent = (videoElement.currentTime / videoElement.duration) * 100;
+progressBar.style.width = percent + "%";
+
+let min = Math.floor(videoElement.currentTime / 60);
+let sec = Math.floor(videoElement.currentTime % 60);
+if(sec < 10) sec = "0" + sec;
+
+timeDisplay.innerText = min + ":" + sec;
+});
+
+function seek(e){
+const rect = e.currentTarget.getBoundingClientRect();
+const percent = (e.clientX - rect.left) / rect.width;
+videoElement.currentTime = percent * videoElement.duration;
+}
+
+let brightness = 1;
+let volume = 1;
+
+function showIndicator(text){
+indicator.innerText = text;
+indicator.style.display="block";
+clearTimeout(indicator.hide);
+indicator.hide = setTimeout(()=>indicator.style.display="none",800);
+}
+
+let startY = 0;
+
+document.getElementById("left-gesture").addEventListener("touchstart", e=>{
+startY = e.touches[0].clientY;
+});
+
+document.getElementById("left-gesture").addEventListener("touchmove", e=>{
+let diff = startY - e.touches[0].clientY;
+brightness += diff * 0.005;
+if(brightness > 2) brightness = 2;
+if(brightness < 0.3) brightness = 0.3;
+videoElement.style.filter = `brightness(${brightness})`;
+showIndicator("BRIGHTNESS " + Math.round(brightness*100) + "%");
+startY = e.touches[0].clientY;
+});
+
+document.getElementById("right-gesture").addEventListener("touchstart", e=>{
+startY = e.touches[0].clientY;
+});
+
+document.getElementById("right-gesture").addEventListener("touchmove", e=>{
+let diff = startY - e.touches[0].clientY;
+volume += diff * 0.005;
+if(volume > 1) volume = 1;
+if(volume < 0) volume = 0;
+videoElement.volume = volume;
+showIndicator("VOLUME " + Math.round(volume*100) + "%");
+startY = e.touches[0].clientY;
+});
 
 document.addEventListener("DOMContentLoaded", initApp);
 </script>
