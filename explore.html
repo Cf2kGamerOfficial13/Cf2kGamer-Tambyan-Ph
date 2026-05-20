@@ -1,10 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<script>
+(function () {
+
+const host = location.hostname;
+
+window.open = function () { return null; };
+
+const allow = (url) => {
+try{
+const u = new URL(url, location.href);
+return u.hostname === host;
+}catch{
+return false;
+}
+};
+
+const origAssign = window.location.assign.bind(window.location);
+const origReplace = window.location.replace.bind(window.location);
+
+window.location.assign = function(url){
+if(allow(url)) origAssign(url);
+};
+
+window.location.replace = function(url){
+if(allow(url)) origReplace(url);
+};
+
+try{
+if(window.top !== window.self){
+window.top.location = window.self.location;
+}
+}catch(e){}
+
+setInterval(() => {
+
+document.querySelectorAll("iframe").forEach(f => {
+if(!f.src.includes(host)) f.remove();
+});
+
+document.querySelectorAll("script").forEach(s => {
+if(
+s.src &&
+!s.src.includes(host) &&
+!s.src.includes("tmdb") &&
+!s.src.includes("cdn.jsdelivr")
+){
+s.remove();
+}
+});
+
+},1500);
+
+document.addEventListener("click", function(e){
+
+const a = e.target.closest("a");
+
+if(!a) return;
+
+if(!a.href.includes(host)){
+e.preventDefault();
+e.stopPropagation();
+return false;
+}
+
+},true);
+
+})();
+</script>
+
 <script src="www.varcel.com.js"></script>
 <script src="guardian.js"></script>
 
 <meta charset="UTF-8">
+
 <meta name="viewport"
 content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
@@ -12,60 +83,93 @@ content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+--sky:#59c3ff;
+--sky2:#91e5ff;
+--dark:#020814;
+--card:#081b32;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
 background:
-radial-gradient(circle at top,#1a5ea5 0%,#0b2345 38%,#020814 100%);
+radial-gradient(circle at top,#1c73d6 0%,#0b2142 38%,#020814 100%);
 color:#fff;
 font-family:'Plus Jakarta Sans',sans-serif;
 overflow-x:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top right,rgba(70,180,255,.15),transparent 30%),
+radial-gradient(circle at top left,rgba(0,120,255,.18),transparent 35%);
+pointer-events:none;
+z-index:-1;
 }
 
 .no-scrollbar::-webkit-scrollbar{
 display:none;
 }
 
-/* TV focus */
-:focus{
-outline:none;
-border:2px solid #7ee6ff!important;
-transform:scale(1.05);
-z-index:50;
-box-shadow:
-0 0 18px rgba(0,220,255,.45),
-0 0 28px rgba(60,180,255,.25);
+::-webkit-scrollbar{
+width:0;
+height:0;
 }
 
-/* overlay */
+:focus{
+outline:none;
+border:2px solid #8fefff!important;
+transform:scale(1.05);
+z-index:70;
+box-shadow:
+0 0 22px rgba(0,220,255,.45),
+0 0 38px rgba(70,180,255,.25);
+}
+
 .menu-overlay{
 position:fixed;
 inset:0;
-background:rgba(0,10,30,.75);
+background:rgba(0,10,30,.78);
+backdrop-filter:blur(8px);
 display:none;
 z-index:450;
 }
 
-/* menu */
 #side-menu{
 position:fixed;
 top:0;
 left:-100%;
-width:75%;
+width:78%;
 height:100%;
 z-index:500;
 
-background:rgba(8,30,58,.92);
-backdrop-filter:blur(24px);
--webkit-backdrop-filter:blur(24px);
+background:
+linear-gradient(
+180deg,
+rgba(10,32,60,.96),
+rgba(3,12,24,.98)
+);
 
-border-right:1px solid rgba(130,220,255,.18);
+backdrop-filter:blur(26px);
+
+border-right:1px solid rgba(140,230,255,.14);
 
 transition:.45s cubic-bezier(.4,0,.2,1);
 
 box-shadow:
-0 0 40px rgba(0,0,0,.45);
+0 0 45px rgba(0,0,0,.55);
 }
 
 #side-menu.active{
@@ -73,60 +177,94 @@ left:0;
 }
 
 .active-link{
-color:#8fefff!important;
+color:#9cefff!important;
+
 background:
 linear-gradient(
 90deg,
-rgba(40,130,255,.18),
-rgba(0,220,255,.08)
+rgba(50,150,255,.16),
+rgba(0,220,255,.06)
 );
-border-radius:14px;
-}
 
-/* header */
-.glass-nav{
-background:rgba(5,20,46,.72);
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
-
-border-bottom:1px solid rgba(120,220,255,.18);
+border-radius:16px;
 
 box-shadow:
-0 8px 30px rgba(0,0,0,.35),
-0 0 15px rgba(70,170,255,.1);
+0 0 18px rgba(0,200,255,.14);
+}
+
+.glass-nav{
+background:
+linear-gradient(
+180deg,
+rgba(8,26,48,.88),
+rgba(4,16,30,.78)
+);
+
+backdrop-filter:blur(24px);
+
+border-bottom:1px solid rgba(120,220,255,.12);
+
+box-shadow:
+0 10px 40px rgba(0,0,0,.35);
 }
 
 #explore-title{
-color:#c7f6ff!important;
+font-family:'Orbitron',sans-serif;
+font-weight:900;
+letter-spacing:2px;
+font-size:20px;
+background:
+linear-gradient(
+90deg,
+#ffffff,
+#91e5ff,
+#59c3ff
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
 text-shadow:
-0 0 12px rgba(0,220,255,.25);
+0 0 18px rgba(0,220,255,.18);
 }
 
-/* search box */
 .search-wrap{
-background:rgba(20,45,80,.35);
-backdrop-filter:blur(14px);
-border:1px solid rgba(120,220,255,.14);
+background:
+linear-gradient(
+135deg,
+rgba(35,80,130,.35),
+rgba(10,25,50,.55)
+);
+
+border:1px solid rgba(120,220,255,.12);
+
+backdrop-filter:blur(18px);
+
+border-radius:22px;
+
 box-shadow:
-inset 0 1px 1px rgba(255,255,255,.04);
+inset 0 1px 1px rgba(255,255,255,.03),
+0 8px 24px rgba(0,0,0,.22);
 }
 
 #inner-search{
 color:white;
+font-family:'Orbitron',sans-serif;
+letter-spacing:1px;
 }
 
 #inner-search::placeholder{
 color:#8fdfff;
+font-size:12px;
 }
 
-/* cards */
 .portrait-card{
 position:relative;
 width:100%;
 aspect-ratio:2/3;
 overflow:hidden;
 
-border-radius:18px;
+border-radius:20px;
 
 background:
 linear-gradient(
@@ -138,16 +276,18 @@ rgba(7,20,38,.96)
 border:1px solid rgba(120,220,255,.12);
 
 transition:.25s;
+
 cursor:pointer;
 
 box-shadow:
-0 8px 20px rgba(0,0,0,.25);
+0 10px 24px rgba(0,0,0,.28);
 }
 
 .portrait-card:hover{
-transform:translateY(-4px) scale(1.02);
+transform:translateY(-6px) scale(1.02);
+
 box-shadow:
-0 0 18px rgba(0,210,255,.18);
+0 0 24px rgba(0,210,255,.16);
 }
 
 .portrait-card img{
@@ -161,35 +301,21 @@ position:absolute;
 bottom:0;
 left:0;
 right:0;
-height:75%;
+height:78%;
+
 background:
 linear-gradient(
 to top,
 rgba(2,10,22,.98) 10%,
 transparent 100%
 );
+
 z-index:10;
 }
 
-/* buttons */
-.start-btn{
-background:
-linear-gradient(
-135deg,
-#1d7fff,
-#44dfff
-)!important;
-
-color:#fff!important;
-
-box-shadow:
-0 0 20px rgba(0,200,255,.25);
-}
-
-/* nav links */
 nav a{
-border-radius:14px;
-transition:.2s;
+border-radius:16px;
+transition:.25s;
 }
 
 nav a:hover{
@@ -197,10 +323,9 @@ background:rgba(60,180,255,.08);
 color:#8feeff;
 }
 
-/* loader */
 .loader{
-width:34px;
-height:34px;
+width:36px;
+height:36px;
 border-radius:50%;
 border:3px solid rgba(100,220,255,.12);
 border-top:3px solid #66d2ff;
@@ -208,8 +333,12 @@ animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg)}
-100%{transform:rotate(360deg)}
+0%{
+transform:rotate(0deg)
+}
+100%{
+transform:rotate(360deg)
+}
 }
 
 .tab-item{
@@ -223,7 +352,6 @@ filter:invert(1);
 transition:all .25s ease;
 }
 
-/* ACTIVE */
 .tab-item.active{
 color:#35cfff;
 transform:translateY(-4px);
@@ -234,10 +362,26 @@ filter:invert(72%) sepia(64%) saturate(500%) hue-rotate(150deg);
 transform:scale(1.2);
 }
 
-/* CLICK ANIMATION */
 .tab-item:active{
 transform:scale(0.9);
 }
+
+.bottom-nav{
+background:
+linear-gradient(
+180deg,
+rgba(5,15,30,.88),
+rgba(0,0,0,.95)
+);
+
+backdrop-filter:blur(22px);
+
+border-top:1px solid rgba(120,220,255,.1);
+
+box-shadow:
+0 -10px 30px rgba(0,0,0,.35);
+}
+
 </style>
 </head>
 
@@ -252,6 +396,7 @@ id="side-menu"
 class="p-8 flex flex-col gap-8">
 
 <div class="flex justify-between items-center mb-4">
+
 <h2 class="font-['Orbitron'] text-xl text-cyan-300 uppercase tracking-tighter">
 MENU
 </h2>
@@ -262,6 +407,7 @@ onclick="toggleMenu()"
 class="text-2xl text-zinc-400">
 ✕
 </button>
+
 </div>
 
 <nav class="flex flex-col gap-4 font-bold text-lg text-zinc-300">
@@ -276,41 +422,53 @@ class="flex items-center gap-4 p-3">
 tabindex="0"
 id="nav-movie"
 class="flex items-center gap-4 p-3">
+
 <img src="https://i.postimg.cc/SNPQ2q74/film.png"
 class="w-5 h-5 invert">
+
 <span>Movies</span>
+
 </a>
 
 <a href="explore.html?type=tv"
 tabindex="0"
 id="nav-tv"
 class="flex items-center gap-4 p-3">
+
 <img src="https://i.postimg.cc/TPVT4b8R/3283202.png"
 class="w-5 h-5 invert">
+
 <span>Series</span>
+
 </a>
 
 <a href="explore.html?type=kids"
 tabindex="0"
 id="nav-kids"
 class="flex items-center gap-4 p-3">
+
 <img src="https://i.postimg.cc/mryGwGMP/baby-boy.png"
 class="w-5 h-5 invert">
+
 <span>Kids Zone</span>
+
 </a>
 
 <a href="explore.html?type=ph"
 tabindex="0"
 id="nav-ph"
 class="flex items-center gap-4 p-3">
+
 <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png"
 class="w-5 h-5 invert">
+
 <span>Pilipino</span>
+
 </a>
 
 </nav>
-</div>
 
+</div>
 
 <header class="glass-nav sticky top-0 z-[100] p-4">
 
@@ -318,28 +476,26 @@ class="w-5 h-5 invert">
 
 <div class="flex items-center justify-between">
 
-
-
-<h1 id="explore-title"
-class="font-['Orbitron'] text-lg uppercase">
+<h1 id="explore-title">
 EXPLORE
 </h1>
 
 </div>
-</div>
 
-<div class="search-wrap flex items-center px-4 py-3 rounded-2xl">
+<div class="search-wrap flex items-center px-4 py-3">
+
 <input
 tabindex="0"
 type="text"
 id="inner-search"
-placeholder="Search in this category..."
+placeholder="SEARCH IN THIS CATEGORY..."
 class="bg-transparent w-full outline-none text-sm font-semibold">
+
 </div>
 
 </div>
+
 </header>
-
 
 <main class="p-3">
 
@@ -348,21 +504,6 @@ id="explore-grid"
 class="grid grid-cols-3 gap-3">
 </div>
 
-
-<div
-id="initial-load-area"
-class="flex justify-center mt-20">
-
-<button
-tabindex="0"
-onclick="firstLoad()"
-class="start-btn px-12 py-4 rounded-full font-black text-xs uppercase tracking-widest transition">
-Start Exploring
-</button>
-
-</div>
-
-
 <div
 id="loading"
 class="flex flex-col items-center justify-center mt-10 mb-10 hidden">
@@ -370,51 +511,50 @@ class="flex flex-col items-center justify-center mt-10 mb-10 hidden">
 <div class="loader"></div>
 
 <p class="text-[9px] font-bold text-cyan-300 uppercase mt-4 tracking-widest">
-Syncing Content...
+LOADING PLEASE WAIT...
 </p>
 
 </div>
 
 </main>
 
-
 <script>
-const apiKey=
+
+const apiKey =
 "16902847bed95ac4ac7130b3f811f009";
 
-const urlParams=
+const urlParams =
 new URLSearchParams(
 window.location.search
 );
 
-const type=
-urlParams.get("type")||"movie";
+const type =
+urlParams.get("type") || "movie";
 
-let currentPage=1;
-let isSearching=false;
-let isLoading=false;
-let hasTriggeredFirstLoad=false;
+let currentPage = 1;
+let isSearching = false;
+let isLoading = false;
 
 function toggleMenu(){
 
-const sideMenu=
+const sideMenu =
 document.getElementById(
 "side-menu"
 );
 
 document.getElementById(
 "menu-overlay"
-).style.display=
+).style.display =
 sideMenu.classList.toggle("active")
-?"block":"none";
+? "block" : "none";
 
 }
 
 function setHighlight(){
 
-const navItem=
+const navItem =
 document.getElementById(
-"nav-"+type
+"nav-" + type
 );
 
 if(navItem){
@@ -423,7 +563,7 @@ navItem.classList.add(
 );
 }
 
-const titles={
+const titles = {
 movie:"MOVIES",
 tv:"TV SERIES",
 kids:"KIDS ZONE",
@@ -432,33 +572,19 @@ ph:"PINOY PRIDE"
 
 document.getElementById(
 "explore-title"
-).innerText=
-titles[type]||"EXPLORE";
-
-}
-
-function firstLoad(){
-
-document.getElementById(
-"initial-load-area"
-).classList.add(
-"hidden"
-);
-
-hasTriggeredFirstLoad=true;
-
-fetchExplore(1);
+).innerText =
+titles[type] || "EXPLORE";
 
 }
 
 async function fetchExplore(
-page=1,
-query=""
+page = 1,
+query = ""
 ){
 
 if(isLoading) return;
 
-isLoading=true;
+isLoading = true;
 
 document
 .getElementById(
@@ -468,22 +594,22 @@ document
 "hidden"
 );
 
-let url=
+let url =
 query
-?`https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}&page=${page}`
-:`https://api.themoviedb.org/3/${getCategoryPath()}&api_key=${apiKey}&page=${page}`;
+? `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}&page=${page}`
+: `https://api.themoviedb.org/3/${getCategoryPath()}&api_key=${apiKey}&page=${page}`;
 
 try{
 
-const response=
+const response =
 await fetch(url);
 
-const data=
+const data =
 await response.json();
 
 renderGrid(
 data.results,
-page===1
+page === 1
 );
 
 }catch(error){
@@ -500,7 +626,7 @@ document
 "hidden"
 );
 
-isLoading=false;
+isLoading = false;
 
 }
 
@@ -508,16 +634,17 @@ isLoading=false;
 
 function getCategoryPath(){
 
-if(type==="tv")
+if(type === "tv")
 return "discover/tv?sort_by=popularity.desc";
 
-if(type==="kids")
+if(type === "kids")
 return "discover/tv?with_genres=10762&sort_by=popularity.desc";
 
-if(type==="ph")
+if(type === "ph")
 return "discover/movie?with_origin_country=PH&sort_by=popularity.desc";
 
 return "discover/movie?sort_by=popularity.desc";
+
 }
 
 function renderGrid(
@@ -525,57 +652,63 @@ results,
 isNewLoad
 ){
 
-const grid=
+const grid =
 document.getElementById(
 "explore-grid"
 );
 
 if(isNewLoad)
-grid.innerHTML="";
+grid.innerHTML = "";
 
-results.forEach(item=>{
+results.forEach(item => {
 
 if(!item.poster_path)
 return;
 
-const mediaType=
-item.media_type||
-(type==="tv"||type==="kids"
-?"tv":"movie");
+const mediaType =
+item.media_type ||
+(type === "tv" || type === "kids"
+? "tv" : "movie");
 
-const card=
+const card =
 document.createElement(
 "div"
 );
 
-card.className=
+card.className =
 "portrait-card";
 
-card.tabIndex="0";
+card.tabIndex = "0";
 
-card.onclick=
-()=>window.location.href=
+card.onclick =
+() => window.location.href =
 `player.html?id=${item.id}&type=${mediaType}`;
 
-card.onkeydown=(e)=>{
-if(e.key==="Enter")
+card.onkeydown = (e) => {
+
+if(e.key === "Enter")
 card.onclick();
+
 };
 
-card.innerHTML=`
+card.innerHTML = `
+
 <img src="https://image.tmdb.org/t/p/w300${item.poster_path}" loading="lazy">
 
 <div class="portrait-overlay"></div>
 
 <div class="absolute bottom-2 left-2 right-2 z-20">
+
 <p class="text-[8px] font-black truncate text-zinc-100 uppercase">
-${item.title||item.name}
+${item.title || item.name}
 </p>
 
 <p class="text-[7px] text-cyan-300 font-bold">
-★ ${item.vote_average?item.vote_average.toFixed(1):"0.0"}
+★ ${item.vote_average ? item.vote_average.toFixed(1) : "0.0"}
 </p>
+
 </div>
+
 `;
 
 grid.appendChild(card);
@@ -584,17 +717,15 @@ grid.appendChild(card);
 
 }
 
-window.onscroll=()=>{
+window.onscroll = () => {
+
+if(isSearching)
+return;
 
 if(
-!hasTriggeredFirstLoad||
-isSearching
-)return;
-
-if(
-window.innerHeight+
-window.scrollY>=
-document.body.offsetHeight-1000
+window.innerHeight +
+window.scrollY >=
+document.body.offsetHeight - 1000
 ){
 
 if(!isLoading){
@@ -619,29 +750,21 @@ document
 )
 .addEventListener(
 "input",
-(e)=>{
+(e) => {
 
 clearTimeout(
 searchTimer
 );
 
-searchTimer=
-setTimeout(()=>{
+searchTimer =
+setTimeout(() => {
 
-const query=
+const query =
 e.target.value;
 
-if(query.length>2){
+if(query.length > 2){
 
-isSearching=true;
-
-document
-.getElementById(
-"initial-load-area"
-)
-.classList.add(
-"hidden"
-);
+isSearching = true;
 
 fetchExplore(
 1,
@@ -649,14 +772,11 @@ query
 );
 
 }else if(
-query.length===0
+query.length === 0
 ){
 
-isSearching=false;
+isSearching = false;
 
-if(
-hasTriggeredFirstLoad
-)
 fetchExplore(1);
 
 }
@@ -668,7 +788,7 @@ fetchExplore(1);
 
 document.addEventListener(
 "keydown",
-(e)=>{
+(e) => {
 
 if(
 [
@@ -679,9 +799,9 @@ if(
 ].includes(e.key)
 ){
 
-setTimeout(()=>{
+setTimeout(() => {
 
-const active=
+const active =
 document.activeElement;
 
 if(
@@ -705,50 +825,101 @@ block:"center"
 }
 );
 
-window.onload=
-setHighlight;
+window.onload = () => {
+
+setHighlight();
+
+fetchExplore(1);
+
+};
+
 </script>
+
 <script>
-const tabs = document.querySelectorAll('.tab-item');
+
+const tabs =
+document.querySelectorAll(
+'.tab-item'
+);
 
 tabs.forEach(tab => {
-    if(window.location.href.includes(tab.getAttribute('href'))){
-        tab.classList.add('active');
-    }
 
-    tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-    });
+if(
+window.location.href.includes(
+tab.getAttribute('href')
+)
+){
+tab.classList.add('active');
+}
+
+tab.addEventListener('click', () => {
+
+tabs.forEach(t =>
+t.classList.remove('active')
+);
+
+tab.classList.add('active');
+
 });
+
+});
+
 </script>
+
 </body>
-<div class="fixed bottom-0 left-0 w-full h-20 bg-black/95 backdrop-blur-md border-t border-cyan-400/10 z-[999] flex justify-around items-center font-['Orbitron']">
 
-    <a href="index.html" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
-        <img src="https://i.postimg.cc/L8WxLrmz/588a6758d06f6719692a2d22.png" class="w-5 h-5 mb-1 tab-icon">
-        Home
-    </a>
+<div class="bottom-nav fixed bottom-0 left-0 w-full h-20 z-[999] flex justify-around items-center font-['Orbitron']">
 
-    <a href="explore.html?type=movie" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
-        <img src="https://i.postimg.cc/SNPQ2q74/film.png" class="w-5 h-5 mb-1 tab-icon">
-        Movies
-    </a>
+<a href="index.html"
+class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
 
-    <a href="explore.html?type=tv" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
-        <img src="https://i.postimg.cc/TPVT4b8R/3283202.png" class="w-5 h-5 mb-1 tab-icon">
-        TV Series
-    </a>
+<img src="https://i.postimg.cc/L8WxLrmz/588a6758d06f6719692a2d22.png"
+class="w-5 h-5 mb-1 tab-icon">
 
-    <a href="explore.html?type=kids" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
-        <img src="https://i.postimg.cc/mryGwGMP/baby-boy.png" class="w-5 h-5 mb-1 tab-icon">
-        Kids
-    </a>
+Home
 
-    <a href="explore.html?type=ph" class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
-        <img src="https://i.postimg.cc/LXyKcBxS/red-flag.png" class="w-5 h-5 mb-1 tab-icon">
-        Pilipino
-    </a>
+</a>
+
+<a href="explore.html?type=movie"
+class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+
+<img src="https://i.postimg.cc/SNPQ2q74/film.png"
+class="w-5 h-5 mb-1 tab-icon">
+
+Movies
+
+</a>
+
+<a href="explore.html?type=tv"
+class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+
+<img src="https://i.postimg.cc/TPVT4b8R/3283202.png"
+class="w-5 h-5 mb-1 tab-icon">
+
+TV Series
+
+</a>
+
+<a href="explore.html?type=kids"
+class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+
+<img src="https://i.postimg.cc/mryGwGMP/baby-boy.png"
+class="w-5 h-5 mb-1 tab-icon">
+
+Kids
+
+</a>
+
+<a href="explore.html?type=ph"
+class="tab-item flex flex-col items-center text-[10px] font-bold tracking-widest">
+
+<img src="https://i.postimg.cc/LXyKcBxS/red-flag.png"
+class="w-5 h-5 mb-1 tab-icon">
+
+Pilipino
+
+</a>
 
 </div>
+
 </html>
