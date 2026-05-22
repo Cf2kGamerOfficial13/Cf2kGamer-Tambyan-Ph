@@ -150,7 +150,7 @@
     "id": 1,
     "title": "Kapamilya Channel",
     "image": "https://static.wikia.nocookie.net/russel/images/2/29/Kapamilya_Channel_3D_Logo_2020.png",
-    "file": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg01006-abs-cbn-kapcha-dash-abscbnono/d86c1147-6fe5-4f76-b509-fa9c3ebee7e9/manifest.mpd",
+    "file": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg01006-abs-cbn-kapcha-dash-abscbnono/manifest.mpd",
     "type": "dash",
     "drm": {
       "clearkey": {
