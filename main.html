@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>CF2KGAMER TAMBAYAN PH</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
+html,
+body{
+width:100%;
+height:100%;
+background:#050A14;
+overflow-x:auto;
+overflow-y:auto;
+color:white;
+}
+
+body::-webkit-scrollbar{
+display:none;
+}
+
+.main{
+min-height:100vh;
+width:100%;
+padding:40px;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.logo{
+font-size:48px;
+font-weight:900;
+text-align:center;
+background:linear-gradient(
+to bottom,
+#1DA1FF,
+#3B82F6,
+#60A5FA
+);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.sub{
+margin-top:10px;
+font-size:18px;
+color:#7AB6FF;
+margin-bottom:45px;
+}
+
+.cards-scroll{
+width:100%;
+overflow-x:auto;
+overflow-y:hidden;
+scroll-behavior:smooth;
+}
+
+.cards-scroll::-webkit-scrollbar{
+display:none;
+}
+
+.cards-row{
+display:flex;
+gap:30px;
+width:max-content;
+padding-bottom:10px;
+}
+
+.card{
+width:360px;
+min-height:260px;
+padding:40px;
+border-radius:35px;
+background:linear-gradient(
+to bottom,
+#0B2A5B,
+#050A14
+);
+border:2px solid #3B82F6;
+display:flex;
+flex-direction:column;
+flex-shrink:0;
+transition:0.2s;
+cursor:pointer;
+outline:none;
+}
+
+.card:hover,
+.card:focus{
+border:4px solid white;
+background:linear-gradient(
+to bottom,
+#1E40AF,
+#0F172A
+);
+box-shadow:
+0 0 25px rgba(59,130,246,0.9),
+0 0 50px rgba(29,78,216,0.5);
+}
+
+.card img{
+width:80px;
+height:80px;
+align-self:flex-end;
+object-fit:contain;
+}
+
+.spacer{
+height:25px;
+}
+
+.card-title{
+font-size:28px;
+font-weight:700;
+}
+
+.card-sub{
+margin-top:10px;
+font-size:15px;
+color:#7AB6FF;
+margin-bottom:20px;
+}
+
+.enter-btn{
+padding:14px 40px;
+border-radius:100px;
+background:#1D4ED8;
+font-size:14px;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:max-content;
+}
+
+.admin-card{
+margin-top:40px;
+}
+
+.dialog{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:999;
+}
+
+.dialog-box{
+width:100%;
+max-width:450px;
+padding:50px;
+border-radius:30px;
+background:#050A14;
+border:2px solid #3B82F6;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.dialog-box img{
+width:120px;
+height:120px;
+object-fit:contain;
+}
+
+.dialog-title{
+margin-top:20px;
+margin-bottom:25px;
+font-size:22px;
+color:#60A5FA;
+text-align:center;
+}
+
+.social-btn{
+width:100%;
+padding:18px;
+border-radius:100px;
+text-align:center;
+text-decoration:none;
+color:white;
+margin-top:15px;
+font-size:15px;
+}
+
+.youtube{
+background:#1D4ED8;
+}
+
+.facebook{
+background:#2563EB;
+}
+
+.close-btn{
+margin-top:25px;
+padding:14px 40px;
+border:none;
+border-radius:100px;
+background:#111827;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+@media(max-width:768px){
+
+.main{
+padding:20px;
+}
+
+.logo{
+font-size:34px;
+}
+
+.card{
+width:290px;
+padding:28px;
+}
+
+.card-title{
+font-size:24px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="main">
+
+<div class="logo">
+CF2KGAMER
+</div>
+
+<div class="sub">
+TAMBAYAN PH
+</div>
+
+<div class="cards-scroll">
+
+<div class="cards-row">
+
+<div class="card"
+tabindex="0"
+onclick="openMovies()">
+
+<img src="https://i.postimg.cc/CK0hywsJ/ic-tv.png">
+
+<div class="spacer"></div>
+
+<div class="card-title">
+MOVIES
+</div>
+
+<div class="card-sub">
+Series & Films
+</div>
+
+<div class="enter-btn">
+ENTER
+</div>
+
+</div>
+
+<div class="card"
+tabindex="0"
+onclick="openLive()">
+
+<img src="https://i.postimg.cc/2SQY7PNW/ic-cf2k.png">
+
+<div class="spacer"></div>
+
+<div class="card-title">
+LIVE TV
+</div>
+
+<div class="card-sub">
+Premium Channels
+</div>
+
+<div class="enter-btn">
+ENTER
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card admin-card"
+tabindex="0"
+onclick="showAdmin()">
+
+<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+
+<div class="spacer"></div>
+
+<div class="card-title">
+ADMIN
+</div>
+
+<div class="card-sub">
+Developer & Owner
+</div>
+
+<div class="enter-btn">
+ENTER
+</div>
+
+</div>
+
+</div>
+
+<div class="dialog"
+id="dialog">
+
+<div class="dialog-box">
+
+<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+
+<div class="dialog-title">
+CF2KGAMER OFFICIAL
+</div>
+
+<a class="social-btn youtube"
+href="https://www.youtube.com/@Cf2kGamerOfficial"
+target="_blank">
+SUBSCRIBE
+</a>
+
+<a class="social-btn facebook"
+href="https://www.facebook.com/profile.php?id=61567068784289"
+target="_blank">
+FOLLOW
+</a>
+
+<button class="close-btn"
+onclick="hideAdmin()">
+CLOSE
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function openMovies(){
+
+window.location.href =
+"home.html";
+
+}
+
+function openLive(){
+
+window.location.href =
+"live.html";
+
+}
+
+function showAdmin(){
+
+document.getElementById(
+'dialog'
+).style.display='flex';
+
+}
+
+function hideAdmin(){
+
+document.getElementById(
+'dialog'
+).style.display='none';
+
+}
+
+function fullscreen(){
+
+const el =
+document.documentElement;
+
+if(el.requestFullscreen){
+
+el.requestFullscreen();
+
+}
+
+else if(el.webkitRequestFullscreen){
+
+el.webkitRequestFullscreen();
+
+}
+
+else if(el.msRequestFullscreen){
+
+el.msRequestFullscreen();
+
+}
+
+}
+
+document.body.addEventListener(
+'click',
+fullscreen,
+{ once:true }
+);
+
+</script>
+
+</body>
+</html>

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
 <title>CF2KGAMER TAMBAYAN PH</title>
 
@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 
 <style>
+
 body{
 margin:0;
 font-family:'Plus Jakarta Sans',sans-serif;
@@ -109,20 +110,6 @@ border:2px solid #6fdcff;
 box-shadow:0 0 18px rgba(0,180,255,.25);
 }
 
-.float-fs{
-position:absolute;
-top:10px;
-right:10px;
-padding:8px 12px;
-font-size:10px;
-border-radius:14px;
-background:rgba(0,20,40,.6);
-backdrop-filter:blur(10px);
-border:1px solid rgba(120,220,255,.2);
-font-family:'Orbitron',sans-serif;
-color:#aeefff;
-}
-
 #title{
 font-family:'Orbitron',sans-serif;
 background:linear-gradient(90deg,#fff,#7fe7ff,#3ab6ff);
@@ -137,7 +124,10 @@ border:1px solid rgba(120,220,255,.2)!important;
 border-radius:12px;
 }
 
-.no-scrollbar::-webkit-scrollbar{display:none;}
+.no-scrollbar::-webkit-scrollbar{
+display:none;
+}
+
 </style>
 
 </head>
@@ -145,8 +135,23 @@ border-radius:12px;
 <body class="pb-10">
 
 <div class="topbar flex items-center gap-4 p-4 sticky top-0 z-50">
-<button onclick="window.location.href='index.html'" class="text-cyan-300 font-bold text-xs font-['Orbitron']">← BACK</button>
-<button onclick="location.reload()" class="text-cyan-200 text-[10px] font-bold uppercase">Reload</button>
+
+<button
+onclick="window.location.href='index.html'"
+class="text-cyan-300 font-bold text-xs font-['Orbitron']">
+
+← BACK
+
+</button>
+
+<button
+onclick="location.reload()"
+class="text-cyan-200 text-[10px] font-bold uppercase">
+
+Reload
+
+</button>
+
 </div>
 
 <div id="player-area" class="video-container">
@@ -154,6 +159,7 @@ border-radius:12px;
 <iframe
 id="player-frame"
 allowfullscreen
+referrerpolicy="no-referrer"
 allow="autoplay; fullscreen">
 </iframe>
 
@@ -162,143 +168,334 @@ allow="autoplay; fullscreen">
 <main class="p-5">
 
 <div class="panel p-5 mb-5">
-<h2 id="title" class="text-xl font-black uppercase">Loading...</h2>
+
+<h2 id="title" class="text-xl font-black uppercase">
+Loading...
+</h2>
+
 <div class="flex gap-3 mt-2">
-<span id="rating" class="text-cyan-300 text-xs font-bold">★ --</span>
-<span id="type-tag" class="text-[9px] px-2 py-1 rounded bg-cyan-900/40">Movie</span>
+
+<span id="rating" class="text-cyan-300 text-xs font-bold">
+★ --
+</span>
+
+<span id="type-tag" class="text-[9px] px-2 py-1 rounded bg-cyan-900/40">
+Movie
+</span>
+
 </div>
+
 </div>
 
 <div class="panel p-5 mb-5">
-<p class="section-title mb-3">SELECT SERVER</p>
-<div class="grid grid-cols-3 gap-3">
-<button onclick="updateServer('server1')" id="btn-server1" class="server-btn py-3 active">S1</button>
-<button onclick="updateServer('server2')" id="btn-server2" class="server-btn py-3">S2</button>
-<button onclick="updateServer('server3')" id="btn-server3" class="server-btn py-3">S3</button>
-<button onclick="updateServer('server4')" id="btn-server4" class="server-btn py-3">S4</button>
-<button onclick="updateServer('server5')" id="btn-server5" class="server-btn py-3">S5</button>
-<button onclick="updateServer('server6')" id="btn-server6" class="server-btn py-3">S6</button>
+
+<p class="section-title mb-3">
+SELECT SERVER
+</p>
+
+<div class="grid grid-cols-2 gap-3">
+
+<button
+onclick="updateServer('vidfastpro')"
+id="btn-vidfastpro"
+class="server-btn py-3 active">
+
+VIDFASTPRO
+
+</button>
+
+<button
+onclick="updateServer('vidlink')"
+id="btn-vidlink"
+class="server-btn py-3">
+
+VIDLINK
+
+</button>
+
 </div>
+
 </div>
 
 <div id="series-controls" class="hidden panel p-5 mb-5">
-<p class="section-title mb-3">EPISODES</p>
-<select id="seasonSelect" onchange="loadEpisodes(this.value)" class="w-full p-3 mb-3"></select>
-<div id="episode-list" class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar"></div>
+
+<p class="section-title mb-3">
+EPISODES
+</p>
+
+<select
+id="seasonSelect"
+onchange="loadEpisodes(this.value)"
+class="w-full p-3 mb-3">
+</select>
+
+<div
+id="episode-list"
+class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto no-scrollbar">
+</div>
+
 </div>
 
 <div class="panel p-5 mb-5">
-<p class="section-title mb-3">OVERVIEW</p>
+
+<p class="section-title mb-3">
+OVERVIEW
+</p>
+
 <p id="overview" class="text-sm text-gray-300"></p>
+
 </div>
 
 <div class="panel p-5">
-<p class="section-title mb-3">TOP CAST</p>
-<div id="cast-list" class="flex gap-4 overflow-x-auto no-scrollbar"></div>
+
+<p class="section-title mb-3">
+TOP CAST
+</p>
+
+<div
+id="cast-list"
+class="flex gap-4 overflow-x-auto no-scrollbar">
+</div>
+
 </div>
 
 </main>
 
 <script>
 
-window.open = function(){ return null; };
+// BLOCK POPUPS + ADS
 
-document.addEventListener("click", function(e){
-  const a = e.target.closest("a");
-  if(a) e.preventDefault();
-}, true);
+(function () {
 
-const apiKey="024c5dee9af18585c60e92fa104e3f8c";
-const urlParams=new URLSearchParams(window.location.search);
-const id=urlParams.get("id");
-const type=urlParams.get("type")||"movie";
+const removeAds = () => {
 
-let currentSeason=1;
-let currentEpisode=1;
-let currentServer="server1";
+document.querySelectorAll(`
+iframe:not(#player-frame),
+.ads,
+.ad,
+.popup,
+.banner,
+[class*="ad-"],
+[id*="ad-"],
+[class*="popup"],
+[id*="popup"]
+`).forEach(el => el.remove());
 
-async function goFullScreen(e){
-if(e){e.preventDefault();e.stopPropagation();}
-const el=document.getElementById("player-area");
-if(el.requestFullscreen) el.requestFullscreen();
+};
+
+setInterval(removeAds, 500);
+
+// block popups
+
+window.open = () => null;
+
+// block redirect links
+
+document.addEventListener('click', e => {
+
+const a = e.target.closest('a');
+
+if (a && a.href && !a.href.includes(location.hostname)) {
+
+e.preventDefault();
+e.stopPropagation();
+
 }
 
+}, true);
+
+})();
+
+const apiKey = "024c5dee9af18585c60e92fa104e3f8c";
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const id = urlParams.get("id");
+
+const type = urlParams.get("type") || "movie";
+
+let currentSeason = 1;
+let currentEpisode = 1;
+let currentServer = "vidfastpro";
+
 function updateServer(serverKey){
-currentServer=serverKey;
-const iframe=document.getElementById("player-frame");
-const mediaType=type==="anime"?"tv":type;
 
-document.querySelectorAll(".server-btn").forEach(b=>b.classList.remove("active"));
-document.getElementById("btn-"+serverKey).classList.add("active");
+currentServer = serverKey;
 
-const servers={
-server1:`https://vidlink.pro/${mediaType}/${id}${mediaType==="tv"?`/${currentSeason}/${currentEpisode}`:""}?autoplay=true`,
-server2:`https://embed.su/embed/${mediaType}/${id}${mediaType==="tv"?`/${currentSeason}/${currentEpisode}`:""}?autoplay=1`,
-server3:`https://player.autoembed.cc/embed/${mediaType}/${id}${mediaType==="tv"?`/${currentSeason}/${currentEpisode}`:""}?autoplay=1`,
-server4:`https://vidsrc.cc/v2/embed/${mediaType}/${id}${mediaType==="tv"?`/${currentSeason}/${currentEpisode}`:""}?autoplay=1`,
-server5:mediaType==="tv"
-?`https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}`
-:`https://www.2embed.cc/embed/${id}`,
-server6:`https://multiembed.mov/?video_id=${id}&tmdb=1${mediaType==="tv"?`&s=${currentSeason}&e=${currentEpisode}`:""}`
+const iframe = document.getElementById("player-frame");
+
+const mediaType = type === "anime"
+? "tv"
+: type;
+
+document
+.querySelectorAll(".server-btn")
+.forEach(btn => btn.classList.remove("active"));
+
+document
+.getElementById("btn-" + serverKey)
+.classList.add("active");
+
+const servers = {
+
+vidfastpro:
+`https://vidfast.pro/${mediaType}/${id}${
+mediaType === "tv"
+? `/${currentSeason}/${currentEpisode}`
+: ""
+}?autoplay=1`,
+
+vidlink:
+`https://vidlink.pro/${mediaType}/${id}${
+mediaType === "tv"
+? `/${currentSeason}/${currentEpisode}`
+: ""
+}?autoplay=1&ads=0`
+
 };
 
-iframe.src=servers[serverKey];
+iframe.src = servers[serverKey];
 
-iframe.onload=()=>{
-try{
-iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}',"*");
-iframe.contentWindow.postMessage('{"method":"unmute"}',"*");
-}catch(e){}
+iframe.onload = () => {
+
+try {
+
+iframe.contentWindow.postMessage(
+'{"event":"command","func":"unMute","args":""}',
+"*"
+);
+
+iframe.contentWindow.postMessage(
+'{"method":"unmute"}',
+"*"
+);
+
+} catch(err){}
+
 };
+
 }
 
 async function init(){
+
 if(!id) return;
-const mediaType=type==="anime"?"tv":type;
 
-const res=await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${apiKey}`);
-const data=await res.json();
+const mediaType = type === "anime"
+? "tv"
+: type;
 
-document.getElementById("title").textContent=data.title||data.name;
-document.getElementById("overview").textContent=data.overview;
-document.getElementById("rating").textContent="★ "+(data.vote_average?data.vote_average.toFixed(1):"0.0");
-document.getElementById("type-tag").textContent=type;
+const res = await fetch(
+`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${apiKey}`
+);
 
-const c=await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}/credits?api_key=${apiKey}`);
-const cd=await c.json();
+const data = await res.json();
 
-document.getElementById("cast-list").innerHTML=cd.cast.slice(0,10).map(p=>`
+document.getElementById("title").textContent =
+data.title || data.name;
+
+document.getElementById("overview").textContent =
+data.overview || "No overview available.";
+
+document.getElementById("rating").textContent =
+"★ " + (
+data.vote_average
+? data.vote_average.toFixed(1)
+: "0.0"
+);
+
+document.getElementById("type-tag").textContent =
+type.toUpperCase();
+
+const castRes = await fetch(
+`https://api.themoviedb.org/3/${mediaType}/${id}/credits?api_key=${apiKey}`
+);
+
+const castData = await castRes.json();
+
+document.getElementById("cast-list").innerHTML =
+castData.cast.slice(0,10).map(person => `
+
 <div class="text-center w-16 flex-shrink-0">
-<img class="cast-img" src="${p.profile_path?"https://image.tmdb.org/t/p/w185"+p.profile_path:"https://via.placeholder.com/60"}">
-<p class="text-[8px] text-cyan-200 truncate">${p.name}</p>
+
+<img
+class="cast-img"
+src="${
+person.profile_path
+? "https://image.tmdb.org/t/p/w185" + person.profile_path
+: "https://via.placeholder.com/60"
+}">
+
+<p class="text-[8px] text-cyan-200 truncate">
+${person.name}
+</p>
+
 </div>
+
 `).join("");
 
-if(mediaType==="tv"){
-document.getElementById("series-controls").classList.remove("hidden");
-const s=document.getElementById("seasonSelect");
-s.innerHTML=data.seasons.filter(x=>x.season_number>0).map(x=>`<option value="${x.season_number}">Season ${x.season_number}</option>`).join("");
+if(mediaType === "tv"){
+
+document
+.getElementById("series-controls")
+.classList.remove("hidden");
+
+const seasonSelect =
+document.getElementById("seasonSelect");
+
+seasonSelect.innerHTML =
+data.seasons
+.filter(season => season.season_number > 0)
+.map(season => `
+
+<option value="${season.season_number}">
+Season ${season.season_number}
+</option>
+
+`).join("");
+
 loadEpisodes(1);
+
 }else{
-updateServer("server1");
+
+updateServer("vidfastpro");
+
 }
+
 }
 
 async function loadEpisodes(season){
-currentSeason=season;
-const res=await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${season}?api_key=${apiKey}`);
-const data=await res.json();
 
-document.getElementById("episode-list").innerHTML=data.episodes.map(ep=>`
-<button onclick="setEpisode(${ep.episode_number})" class="ep-btn py-2">EP ${ep.episode_number}</button>
+currentSeason = season;
+
+const res = await fetch(
+`https://api.themoviedb.org/3/tv/${id}/season/${season}?api_key=${apiKey}`
+);
+
+const data = await res.json();
+
+document.getElementById("episode-list").innerHTML =
+data.episodes.map(ep => `
+
+<button
+onclick="setEpisode(${ep.episode_number})"
+class="ep-btn py-2">
+
+EP ${ep.episode_number}
+
+</button>
+
 `).join("");
 
 setEpisode(1);
+
 }
 
 function setEpisode(ep){
-currentEpisode=ep;
+
+currentEpisode = ep;
+
 updateServer(currentServer);
+
 }
 
 init();
