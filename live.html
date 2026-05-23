@@ -2,80 +2,138 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
 <title>CF2KGAMER TAMBAYAN PH | PRO</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.9.3/shaka-player.compiled.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Inter,sans-serif}
 
-body{
-background:radial-gradient(circle at top,#0f4aa0 0%,#06172f 50%,#000 100%)
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+outline:none
 }
 
-.wrapper{position:relative;width:100%;height:100%}
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+background:#000;
+font-family:Inter,sans-serif
+}
 
-/* VIDEO CENTER SAKTO LANG SIZE */
+body{
+background:
+radial-gradient(circle at top,
+#0f4aa0 0%,
+#06172f 50%,
+#000 100%)
+}
+
+.wrapper{
+position:relative;
+width:100%;
+height:100%
+}
+
+.top{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 16px;
+z-index:60;
+background:
+linear-gradient(to bottom,
+rgba(0,0,0,.85),
+transparent)
+}
+
+.menu{
+width:58px;
+height:58px;
+border-radius:18px;
+background:rgba(10,25,50,.75);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:5px;
+border:1px solid rgba(120,210,255,.25);
+cursor:pointer;
+transition:.2s
+}
+
+.menu span{
+width:24px;
+height:3px;
+background:#a6e7ff;
+border-radius:10px
+}
+
+.menu.focused{
+transform:scale(1.08);
+border:2px solid #fff;
+background:#0a84ff
+}
+
+.brand{
+text-align:right;
+color:#dff8ff;
+font-family:Orbitron
+}
+
+.brand h1{
+font-size:16px;
+font-weight:900
+}
+
+.brand p{
+font-size:11px;
+color:#86dcff;
+margin-top:3px
+}
+
 .player-box{
 position:absolute;
 top:85px;
 left:50%;
 transform:translateX(-50%);
-width:92%;
-max-width:420px;
-height:240px;   /* sakto lang height */
+width:94%;
+max-width:980px;
+aspect-ratio:16/9;
 background:#000;
-border-radius:18px;
+border-radius:22px;
 overflow:hidden;
-border:1px solid rgba(120,210,255,.25);
-box-shadow:0 10px 30px rgba(0,0,0,.6);
-z-index:10;
+border:2px solid rgba(120,210,255,.25);
+box-shadow:0 12px 35px rgba(0,0,0,.6);
+z-index:10
 }
 
 video{
 width:100%;
 height:100%;
-object-fit:cover;
-background:#000
+background:#000;
+object-fit:contain
 }
 
-/* TOP BAR */
-.top{
-position:absolute;top:0;left:0;width:100%;
-display:flex;justify-content:space-between;align-items:center;
-padding:14px 16px;
-z-index:50;
-background:linear-gradient(to bottom,rgba(0,0,0,.85),transparent)
-}
-
-.menu{
-width:50px;height:50px;border-radius:16px;
-background:rgba(10,25,50,.75);
-display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;
-border:1px solid rgba(120,210,255,.25);
-cursor:pointer
-}
-
-.menu span{width:22px;height:2px;background:#a6e7ff;border-radius:10px}
-
-.brand{
-text-align:right;color:#dff8ff;font-family:Orbitron
-}
-
-.brand h1{font-size:13px;font-weight:900}
-.brand p{font-size:10px;color:#86dcff;margin-top:3px}
-
-/* OVERLAY */
 .overlay{
-position:absolute;inset:0;
+position:absolute;
+inset:0;
 display:flex;
-z-index:40;
+z-index:50;
 pointer-events:none
 }
 
@@ -86,11 +144,13 @@ overflow:hidden;
 background:rgba(5,15,30,.97);
 backdrop-filter:blur(18px);
 border-right:1px solid rgba(120,210,255,.2);
-transition:.3s;
+transition:.25s;
 pointer-events:auto
 }
 
-.overlay.active .panel{width:320px}
+.overlay.active .panel{
+width:360px
+}
 
 .list{
 padding:90px 14px 14px;
@@ -102,35 +162,154 @@ overflow-y:auto
 }
 
 .item{
-display:flex;gap:10px;align-items:center;
-padding:12px;border-radius:16px;
+display:flex;
+gap:12px;
+align-items:center;
+padding:14px;
+border-radius:18px;
 background:rgba(10,25,50,.65);
 border:1px solid rgba(120,210,255,.18);
 cursor:pointer;
+transition:.18s
+}
+
+.item.active{
+background:
+linear-gradient(135deg,#0a84ff,#00d4ff)
+}
+
+.item.focused{
+transform:scale(1.05);
+border:2px solid #fff;
+background:
+linear-gradient(135deg,#0a84ff,#00d4ff);
+box-shadow:0 0 20px rgba(0,180,255,.6)
+}
+
+.logo{
+width:72px;
+height:50px;
+border-radius:12px;
+object-fit:cover;
+background:#000
+}
+
+.title{
+font-size:14px;
+font-weight:700;
+color:#fff
+}
+
+.status{
+font-size:10px;
+color:#7fe3ff;
+font-family:Orbitron;
+margin-top:4px
+}
+
+.statusbox{
+position:absolute;
+top:180px;
+left:50%;
+transform:translateX(-50%);
+padding:12px 16px;
+border-radius:16px;
+background:rgba(10,25,50,.88);
+font-size:12px;
+font-family:Orbitron;
+display:none;
+z-index:80;
+color:#fff
+}
+
+.fullscreen-btn{
+position:absolute;
+right:15px;
+bottom:15px;
+width:58px;
+height:58px;
+border-radius:16px;
+background:rgba(10,25,50,.85);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:22px;
+color:#fff;
+border:1px solid rgba(120,210,255,.3);
+cursor:pointer;
+z-index:30;
 transition:.2s
 }
 
-.item:hover{transform:translateY(-2px);background:linear-gradient(135deg,#0a84ff,#00d4ff)}
-
-.item.active{background:linear-gradient(135deg,#0a84ff,#00d4ff)}
-
-.logo{width:60px;height:42px;border-radius:10px;object-fit:cover;background:#000}
-
-.title{font-size:13px;font-weight:700;color:#fff}
-
-.status{font-size:10px;color:#7fe3ff;font-family:Orbitron;margin-top:3px}
-
-.statusbox{
-position:absolute;top:180px;left:50%;
-transform:translateX(-50%);
-padding:10px 14px;
-border-radius:14px;
-background:rgba(10,25,50,.85);
-font-size:11px;
-font-family:Orbitron;
-display:none;
-z-index:60
+.fullscreen-btn.focused{
+transform:scale(1.08);
+background:#0a84ff;
+border:2px solid #fff
 }
+
+::-webkit-scrollbar{
+width:5px
+}
+
+::-webkit-scrollbar-thumb{
+background:#0a84ff;
+border-radius:20px
+}
+
+@media(max-width:700px){
+
+.player-box{
+top:78px;
+width:96%;
+border-radius:16px
+}
+
+.top{
+padding:12px
+}
+
+.menu{
+width:50px;
+height:50px
+}
+
+.brand h1{
+font-size:13px
+}
+
+.brand p{
+font-size:9px
+}
+
+.overlay.active .panel{
+width:100%
+}
+
+.list{
+padding:80px 10px 10px
+}
+
+.item{
+padding:12px
+}
+
+.logo{
+width:64px;
+height:44px
+}
+
+.title{
+font-size:12px
+}
+
+.fullscreen-btn{
+width:50px;
+height:50px;
+font-size:18px
+}
+
+}
+
 </style>
 </head>
 
@@ -139,84 +318,210 @@ z-index:60
 <div class="wrapper">
 
 <div class="top">
-<div class="menu" onclick="toggleMenu()">
-<span></span><span></span><span></span>
+
+<div
+class="menu"
+id="menuBtn"
+tabindex="0">
+
+<span></span>
+<span></span>
+<span></span>
+
 </div>
 
 <div class="brand">
 <h1>CF2KGAMER</h1>
 <p id="now">LIVE</p>
 </div>
+
 </div>
 
 <div class="player-box">
-<video id="video" autoplay playsinline controls></video>
+
+<video
+id="video"
+autoplay
+playsinline
+controls>
+</video>
+
+<div
+class="fullscreen-btn"
+id="fullscreenBtn"
+tabindex="0">
+
+⛶
+
+</div>
+
 </div>
 
 <div class="overlay" id="overlay">
+
 <div class="panel">
-<div class="list" id="channel-list-container"></div>
-</div>
+
+<div
+class="list"
+id="channel-list-container">
 </div>
 
-<div class="statusbox" id="status">LOADING...</div>
+</div>
+
+</div>
+
+<div
+class="statusbox"
+id="status">
+
+LOADING...
+
+</div>
 
 </div>
 
 <script>
+
 let channels=[]
 let hls=null
 let shakaPlayer=null
 
-const video=document.getElementById("video")
-const overlay=document.getElementById("overlay")
-const statusBox=document.getElementById("status")
+let currentFocus=0
+let currentChannel=0
 
-const CHANNELS_URL="https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.json"
+const video=
+document.getElementById("video")
+
+const overlay=
+document.getElementById("overlay")
+
+const statusBox=
+document.getElementById("status")
+
+const menuBtn=
+document.getElementById("menuBtn")
+
+const fullscreenBtn=
+document.getElementById("fullscreenBtn")
+
+const CHANNELS_URL=
+"https://raw.githubusercontent.com/Cf2kGamerOfficial13/Cf2kGamer-Tambyan-Ph/main/channels.json"
 
 function toggleMenu(){
+
 overlay.classList.toggle("active")
+
+if(overlay.classList.contains("active")){
+
+setTimeout(()=>{
+focusItem(currentFocus)
+},150)
+
+}else{
+
+menuBtn.focus()
+
+}
+
 }
 
 async function loadChannels(){
-try{
-statusBox.style.display="block"
-statusBox.innerText="LOADING CHANNELS..."
 
-const res=await fetch(CHANNELS_URL+"?v="+Date.now(),{cache:"no-store"})
+try{
+
+statusBox.style.display="block"
+
+statusBox.innerText=
+"LOADING CHANNELS..."
+
+const res=await fetch(
+CHANNELS_URL+"?v="+Date.now(),
+{
+cache:"no-store"
+}
+)
+
 channels=await res.json()
 
 statusBox.style.display="none"
+
 return true
+
 }catch(e){
-statusBox.innerText="FAILED"
+
+statusBox.innerText=
+"FAILED TO LOAD"
+
 return false
+
 }
+
 }
 
 async function initApp(){
+
 shaka.polyfill.installAll()
-shakaPlayer=new shaka.Player(video)
 
-let ok=await loadChannels()
+shakaPlayer=
+new shaka.Player(video)
+
+let ok=
+await loadChannels()
+
 if(ok){
+
 renderChannels()
-setTimeout(()=>document.querySelector(".item")?.click(),600)
+
+setTimeout(()=>{
+playChannel(0)
+},500)
+
 }
+
 }
 
-async function switchChannel(ch,el){
+async function playChannel(index){
 
-document.querySelectorAll(".item").forEach(x=>x.classList.remove("active"))
-el.classList.add("active")
+if(index<0)
+index=channels.length-1
 
-document.getElementById("now").innerText=ch.title
+if(index>=channels.length)
+index=0
+
+currentChannel=index
+
+const ch=
+channels[index]
+
+const items=
+document.querySelectorAll(".item")
+
+items.forEach(x=>
+x.classList.remove("active")
+)
+
+if(items[index])
+items[index].classList.add("active")
+
+document
+.getElementById("now")
+.innerText=ch.title
+
 overlay.classList.remove("active")
 
 statusBox.style.display="block"
-statusBox.innerText="CONNECTING..."
 
-if(hls){hls.destroy();hls=null}
+statusBox.innerText=
+"CONNECTING..."
+
+if(hls){
+
+hls.destroy()
+
+hls=null
+
+}
+
 await shakaPlayer.unload()
 
 let url=ch.file
@@ -226,9 +531,18 @@ try{
 if(url.includes(".mpd")){
 
 if(ch.drm?.clearkey){
+
 shakaPlayer.configure({
-drm:{clearKeys:{[ch.drm.clearkey.keyId]:ch.drm.clearkey.key}}
+
+drm:{
+clearKeys:{
+[ch.drm.clearkey.keyId]:
+ch.drm.clearkey.key
+}
+}
+
 })
+
 }
 
 await shakaPlayer.load(url)
@@ -236,42 +550,290 @@ await shakaPlayer.load(url)
 }else{
 
 if(Hls.isSupported()){
+
 hls=new Hls()
+
 hls.loadSource(url)
+
 hls.attachMedia(video)
-}else video.src=url
+
+}else{
+
+video.src=url
+
+}
+
 }
 
 video.play()
-setTimeout(()=>statusBox.style.display="none",1000)
+
+setTimeout(()=>{
+
+statusBox.style.display="none"
+
+},1000)
 
 }catch(e){
-statusBox.innerText="CHANNEL OFFLINE"
+
+statusBox.innerText=
+"CHANNEL OFFLINE"
+
 }
+
 }
 
 function renderChannels(){
-const container=document.getElementById("channel-list-container")
+
+const container=
+document.getElementById(
+"channel-list-container"
+)
+
 container.innerHTML=""
 
-channels.forEach(ch=>{
-const el=document.createElement("div")
+channels.forEach((ch,index)=>{
+
+const el=
+document.createElement("div")
+
 el.className="item"
 
+el.setAttribute("tabindex","0")
+
 el.innerHTML=`
-<img class="logo" src="${ch.image||''}" onerror="this.src='https://via.placeholder.com/80x50'">
+
+<img
+class="logo"
+src="${ch.image||''}"
+onerror="this.src='https://via.placeholder.com/80x50'">
+
 <div>
-<div class="title">${ch.title}</div>
-<div class="status">● LIVE</div>
+
+<div class="title">
+${ch.title}
 </div>
+
+<div class="status">
+● LIVE
+</div>
+
+</div>
+
 `
 
-el.onclick=()=>switchChannel(ch,el)
-container.appendChild(el)
-})
+el.onclick=()=>{
+
+currentFocus=index
+
+playChannel(index)
+
 }
 
-document.addEventListener("DOMContentLoaded",initApp)
+el.onfocus=()=>{
+
+removeFocused()
+
+el.classList.add("focused")
+
+currentFocus=index
+
+}
+
+container.appendChild(el)
+
+})
+
+}
+
+function removeFocused(){
+
+document
+.querySelectorAll(".item")
+.forEach(x=>
+x.classList.remove("focused")
+)
+
+menuBtn.classList.remove("focused")
+
+fullscreenBtn.classList.remove("focused")
+
+}
+
+function focusItem(index){
+
+const items=
+document.querySelectorAll(".item")
+
+if(!items.length)return
+
+removeFocused()
+
+items[index].classList.add("focused")
+
+items[index].focus()
+
+items[index].scrollIntoView({
+behavior:"smooth",
+block:"nearest"
+})
+
+}
+
+function toggleFullscreen(){
+
+if(!document.fullscreenElement){
+
+document.documentElement.requestFullscreen()
+
+}else{
+
+document.exitFullscreen()
+
+}
+
+}
+
+menuBtn.onclick=()=>{
+
+toggleMenu()
+
+}
+
+fullscreenBtn.onclick=()=>{
+
+toggleFullscreen()
+
+}
+
+document.addEventListener(
+"keydown",
+function(e){
+
+const items=
+document.querySelectorAll(".item")
+
+if(e.key==="ArrowDown"){
+
+if(overlay.classList.contains("active")){
+
+e.preventDefault()
+
+currentFocus++
+
+if(currentFocus>=items.length)
+currentFocus=0
+
+focusItem(currentFocus)
+
+}
+
+}
+
+if(e.key==="ArrowUp"){
+
+if(overlay.classList.contains("active")){
+
+e.preventDefault()
+
+currentFocus--
+
+if(currentFocus<0)
+currentFocus=items.length-1
+
+focusItem(currentFocus)
+
+}
+
+}
+
+if(e.key==="ArrowLeft"){
+
+if(!overlay.classList.contains("active")){
+
+toggleMenu()
+
+}else{
+
+focusItem(currentFocus)
+
+}
+
+}
+
+if(e.key==="ArrowRight"){
+
+overlay.classList.remove("active")
+
+fullscreenBtn.focus()
+
+removeFocused()
+
+fullscreenBtn.classList.add("focused")
+
+}
+
+if(e.key==="Enter"){
+
+if(document.activeElement
+.classList.contains("item")){
+
+document.activeElement.click()
+
+}
+
+if(document.activeElement
+===menuBtn){
+
+toggleMenu()
+
+}
+
+if(document.activeElement
+===fullscreenBtn){
+
+toggleFullscreen()
+
+}
+
+}
+
+if(e.key==="MediaChannelUp"){
+
+playChannel(currentChannel+1)
+
+}
+
+if(e.key==="MediaChannelDown"){
+
+playChannel(currentChannel-1)
+
+}
+
+if(e.key==="Backspace"
+|| e.key==="Escape"){
+
+if(overlay.classList.contains("active")){
+
+overlay.classList.remove("active")
+
+menuBtn.focus()
+
+removeFocused()
+
+menuBtn.classList.add("focused")
+
+}
+
+}
+
+}
+)
+
+document.addEventListener(
+"DOMContentLoaded",
+initApp
+)
+
 </script>
 
 </body>
