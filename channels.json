@@ -151,7 +151,7 @@
     "title": "Kapamilya Channel",
     "image": "https://static.wikia.nocookie.net/russel/images/2/29/Kapamilya_Channel_3D_Logo_2020.png",
     "file": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg01006-abs-cbn-kapcha-dash-abscbnono/manifest.mpd",
-    "type": "hls",
+    "type": "dash",
     "drm": {
       "clearkey": {
         "keyId": "bd17afb5dc9648a39be79ee3634dd4b8",
@@ -206,7 +206,7 @@
     "title": "A2Z",
     "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/A2Z_Channel_11_Logo.png",
     "file": "http://136.239.173.2:6610/001/2/ch00000090990000001087/manifest.mpd?AuthInfo=v87HD9rEhwHiAdYyrP20Tg5pgSMSITY%2FHYvvCWJRp%2BqHRrK8UUahwItHhKpXgPXKytokK1MIobcue1ImXa0ZEA%3D%3D&version=v1.0&BreakPoint=0&virtualDomain=001.live_hls.zte.com&programid=ch00000000000000001176&contentid=ch00000000000000001176&videoid=ch00000090990000001087&recommendtype=0&userid=1287297673984&boid=001&stbid=02%3A00%3A00%3A00%3A00%3A00&terminalflag=1&profilecode=&usersessionid=U4DB4Z0H2EXXXX&NeedJITP=1&JITPMediaType=DASH&JITPDRMType=NO",
-    "type": "hls",
+    "type": "dash",
     "drm": {
       "clearkey": {
         "keyId": "d1f8a0c97b3d4e529a6f2c4b8d7e1f90",
